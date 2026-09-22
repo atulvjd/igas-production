@@ -1,0 +1,19 @@
+{
+  "kind": "collectionType",
+  "collectionName": "navigation_items",
+  "info": { "singularName": "navigation-item", "pluralName": "navigation-items", "displayName": "Navigation item" },
+  "options": { "draftAndPublish": true },
+  "pluginOptions": {},
+  "attributes": {
+    "label": { "type": "string", "required": true },
+    "href": { "type": "string", "required": true },
+    "group": { "type": "string", "required": true },
+    "parentGroup": { "type": "string" },
+    "menuType": { "type": "enumeration", "enum": ["header", "mobile", "footer"], "default": "header" },
+    "external": { "type": "boolean", "default": false },
+    "cta": { "type": "boolean", "default": false },
+    "visible": { "type": "boolean", "default": true },
+    "mode": { "type": "enumeration", "enum": ["india", "global"], "default": "india" },
+    "order": { "type": "integer", "default": 0 }
+  }
+}

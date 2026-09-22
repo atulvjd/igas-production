@@ -1,0 +1,11 @@
+{
+  "collectionName": "components_shared_footer_links",
+  "info": { "displayName": "Footer link" },
+  "options": {},
+  "attributes": {
+    "label": { "type": "string", "required": true },
+    "href": { "type": "string", "required": true },
+    "external": { "type": "boolean", "default": false },
+    "order": { "type": "integer", "default": 0 }
+  }
+}

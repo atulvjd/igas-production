@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_shared_contact_forms",
+  "info": { "displayName": "Contact form" },
+  "options": {},
+  "attributes": {
+    "eyebrow": { "type": "string" },
+    "title": { "type": "string" },
+    "intro": { "type": "text" },
+    "successMessage": { "type": "string" },
+    "consentText": { "type": "string" },
+    "contactEmail": { "type": "email" },
+    "contactPhone": { "type": "string" }
+  }
+}

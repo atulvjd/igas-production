@@ -1,0 +1,10 @@
+{
+  "collectionName": "components_shared_carousels",
+  "info": { "displayName": "Carousel" },
+  "options": {},
+  "attributes": {
+    "eyebrow": { "type": "string" },
+    "title": { "type": "string" },
+    "slides": { "type": "component", "repeatable": true, "component": "shared.carousel-slide" }
+  }
+}

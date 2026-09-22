@@ -1,0 +1,41 @@
+{
+  "kind": "collectionType",
+  "collectionName": "site_settings",
+  "info": {
+    "singularName": "site-setting",
+    "pluralName": "site-settings",
+    "displayName": "Site setting"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "mode": {
+      "type": "enumeration",
+      "enum": ["india", "global"],
+      "required": true,
+      "unique": true
+    },
+    "heroEyebrow": { "type": "string" },
+    "heroTitle": { "type": "string" },
+    "heroIntro": { "type": "text" },
+    "heroCta": { "type": "string" },
+    "heroImageUrl": { "type": "string" },
+    "statementTitle": { "type": "string" },
+    "statementIntro": { "type": "text" },
+    "aboutTitle": { "type": "string" },
+    "aboutText": { "type": "text" },
+    "aboutImageUrl": { "type": "string" },
+    "presenceTitle": { "type": "string" },
+    "presenceText": { "type": "text" },
+    "careersTitle": { "type": "string" },
+    "careersText": { "type": "text" },
+    "careersImageUrl": { "type": "string" },
+    "newsletterTitle": { "type": "string" },
+    "footerSignature": { "type": "text" },
+    "contactEmail": { "type": "email" },
+    "contactPhone": { "type": "string" },
+    "seo": { "type": "component", "repeatable": false, "component": "shared.seo" }
+  }
+}

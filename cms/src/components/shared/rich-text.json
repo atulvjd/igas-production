@@ -1,0 +1,11 @@
+{
+  "collectionName": "components_shared_rich_texts",
+  "info": { "displayName": "Rich text" },
+  "options": {},
+  "attributes": {
+    "eyebrow": { "type": "string" },
+    "title": { "type": "string" },
+    "body": { "type": "blocks" },
+    "theme": { "type": "enumeration", "enum": ["light", "dark", "accent"], "default": "light" }
+  }
+}

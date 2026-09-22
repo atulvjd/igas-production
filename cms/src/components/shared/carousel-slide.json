@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_shared_carousel_slides",
+  "info": { "displayName": "Carousel slide" },
+  "options": {},
+  "attributes": {
+    "category": { "type": "string" },
+    "date": { "type": "string" },
+    "title": { "type": "string", "required": true },
+    "excerpt": { "type": "text" },
+    "imageUrl": { "type": "string" },
+    "imageAlt": { "type": "string" },
+    "image": { "type": "component", "repeatable": false, "component": "shared.media" },
+    "href": { "type": "string" }
+  }
+}

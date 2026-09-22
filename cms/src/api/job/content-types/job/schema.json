@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "jobs",
+  "info": { "singularName": "job", "pluralName": "jobs", "displayName": "Job" },
+  "options": { "draftAndPublish": true },
+  "pluginOptions": {},
+  "attributes": {
+    "title": { "type": "string", "required": true },
+    "slug": { "type": "uid", "targetField": "title", "required": true },
+    "shortDescription": { "type": "text" },
+    "description": { "type": "blocks" },
+    "responsibilities": { "type": "blocks" },
+    "qualifications": { "type": "blocks" },
+    "requirements": { "type": "blocks" },
+    "benefits": { "type": "blocks" },
+    "department": { "type": "string" },
+    "employmentType": { "type": "string" },
+    "location": { "type": "string" },
+    "office": { "type": "relation", "relation": "manyToOne", "target": "api::office.office" },
+    "applicationCTA": { "type": "string" },
+    "applicationStatus": { "type": "enumeration", "enum": ["open", "paused", "closed"], "default": "open" },
+    "deadline": { "type": "date" },
+    "sortOrder": { "type": "integer", "default": 0 },
+    "mode": { "type": "enumeration", "enum": ["india", "global"], "default": "india" },
+    "seo": { "type": "component", "repeatable": false, "component": "shared.seo" }
+  }
+}

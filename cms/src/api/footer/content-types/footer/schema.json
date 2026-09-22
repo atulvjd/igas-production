@@ -1,0 +1,21 @@
+{
+  "kind": "collectionType",
+  "collectionName": "footers",
+  "info": { "singularName": "footer", "pluralName": "footers", "displayName": "Footer" },
+  "options": { "draftAndPublish": true },
+  "pluginOptions": {},
+  "attributes": {
+    "mode": { "type": "enumeration", "enum": ["india", "global"], "required": true },
+    "quote": { "type": "text" },
+    "quoteAuthor": { "type": "string" },
+    "signature": { "type": "text" },
+    "contactEmail": { "type": "email" },
+    "contactPhone": { "type": "string" },
+    "newsletterTitle": { "type": "string" },
+    "newsletterDescription": { "type": "text" },
+    "copyright": { "type": "string" },
+    "usefulLinks": { "type": "component", "repeatable": true, "component": "shared.footer-link" },
+    "legalLinks": { "type": "component", "repeatable": true, "component": "shared.footer-link" },
+    "socialLinks": { "type": "component", "repeatable": true, "component": "shared.social-link" }
+  }
+}

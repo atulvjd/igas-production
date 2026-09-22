@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_shared_image_texts",
+  "info": { "displayName": "Image and text" },
+  "options": {},
+  "attributes": {
+    "eyebrow": { "type": "string" },
+    "title": { "type": "string", "required": true },
+    "body": { "type": "text" },
+    "imageUrl": { "type": "string" },
+    "imageAlt": { "type": "string" },
+    "image": { "type": "component", "repeatable": false, "component": "shared.media" },
+    "imageSide": { "type": "enumeration", "enum": ["left", "right"], "default": "right" },
+    "ctaLabel": { "type": "string" },
+    "ctaHref": { "type": "string" }
+  }
+}

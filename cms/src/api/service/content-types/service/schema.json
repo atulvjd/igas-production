@@ -1,0 +1,43 @@
+{
+  "kind": "collectionType",
+  "collectionName": "services",
+  "info": {
+    "singularName": "service",
+    "pluralName": "services",
+    "displayName": "Service"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "shortDescription": { "type": "text" },
+    "fullContent": { "type": "blocks" },
+    "tag": {
+      "type": "string"
+    },
+    "heroImage": { "type": "component", "repeatable": false, "component": "shared.media" },
+    "relatedIndustries": { "type": "relation", "relation": "manyToMany", "target": "api::industry.industry" },
+    "relatedArticles": { "type": "relation", "relation": "manyToMany", "target": "api::article.article" },
+    "relatedLeadership": { "type": "relation", "relation": "manyToMany", "target": "api::leadership-profile.leadership-profile" },
+    "mode": { "type": "enumeration", "enum": ["india", "global"], "default": "india" },
+    "seo": { "type": "component", "repeatable": false, "component": "shared.seo" },
+    "sortOrder": {
+      "type": "integer",
+      "default": 0
+    }
+  }
+}
