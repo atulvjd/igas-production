@@ -9,6 +9,7 @@
     "ctaLabel": { "type": "string" },
     "ctaHref": { "type": "string" },
     "imageUrl": { "type": "string" },
-    "image": { "type": "component", "repeatable": false, "component": "shared.media" }
+    "image": { "type": "component", "repeatable": false, "component": "shared.media" },
+    "videoUrl": { "type": "string" }
   }
 }

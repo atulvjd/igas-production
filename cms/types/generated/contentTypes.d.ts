@@ -512,12 +512,17 @@ export interface ApiFooterFooter extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    columns: Schema.Attribute.Component<'shared.footer-column', true>;
     contactEmail: Schema.Attribute.Email;
+    contactHeading: Schema.Attribute.String;
     contactPhone: Schema.Attribute.String;
     copyright: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    emailLabel: Schema.Attribute.String;
+    emailPlaceholder: Schema.Attribute.String;
+    legalHeading: Schema.Attribute.String;
     legalLinks: Schema.Attribute.Component<'shared.footer-link', true>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
@@ -528,15 +533,19 @@ export interface ApiFooterFooter extends Struct.CollectionTypeSchema {
     mode: Schema.Attribute.Enumeration<['india', 'global']> &
       Schema.Attribute.Required;
     newsletterDescription: Schema.Attribute.Text;
+    newsletterEyebrow: Schema.Attribute.String;
+    newsletterSuccess: Schema.Attribute.String;
     newsletterTitle: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
     quote: Schema.Attribute.Text;
     quoteAuthor: Schema.Attribute.String;
     signature: Schema.Attribute.Text;
     socialLinks: Schema.Attribute.Component<'shared.social-link', true>;
+    subscribeLabel: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    usefulHeading: Schema.Attribute.String;
     usefulLinks: Schema.Attribute.Component<'shared.footer-link', true>;
   };
 }
@@ -795,6 +804,8 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         'shared.rich-text',
         'shared.image-text',
         'shared.stats',
+        'shared.quote-banner',
+        'shared.collection-listing',
         'shared.carousel',
         'shared.cta',
         'shared.contact-form',
@@ -869,23 +880,18 @@ export interface ApiSiteSettingSiteSetting extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    aboutImageUrl: Schema.Attribute.String;
-    aboutText: Schema.Attribute.Text;
-    aboutTitle: Schema.Attribute.String;
-    careersImageUrl: Schema.Attribute.String;
-    careersText: Schema.Attribute.Text;
-    careersTitle: Schema.Attribute.String;
+    contactConsent: Schema.Attribute.String;
     contactEmail: Schema.Attribute.Email;
+    contactEyebrow: Schema.Attribute.String;
+    contactIntro: Schema.Attribute.Text;
     contactPhone: Schema.Attribute.String;
+    contactPrivacyNote: Schema.Attribute.Text;
+    contactSuccess: Schema.Attribute.String;
+    contactTitle: Schema.Attribute.String;
+    cookieConsent: Schema.Attribute.Component<'shared.cookie-consent', false>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    footerSignature: Schema.Attribute.Text;
-    heroCta: Schema.Attribute.String;
-    heroEyebrow: Schema.Attribute.String;
-    heroImageUrl: Schema.Attribute.String;
-    heroIntro: Schema.Attribute.Text;
-    heroTitle: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -895,13 +901,8 @@ export interface ApiSiteSettingSiteSetting extends Struct.CollectionTypeSchema {
     mode: Schema.Attribute.Enumeration<['india', 'global']> &
       Schema.Attribute.Required &
       Schema.Attribute.Unique;
-    newsletterTitle: Schema.Attribute.String;
-    presenceText: Schema.Attribute.Text;
-    presenceTitle: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
     seo: Schema.Attribute.Component<'shared.seo', false>;
-    statementIntro: Schema.Attribute.Text;
-    statementTitle: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;

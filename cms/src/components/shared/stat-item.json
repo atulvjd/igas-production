@@ -5,6 +5,9 @@
   "attributes": {
     "value": { "type": "string", "required": true },
     "label": { "type": "string", "required": true },
-    "detail": { "type": "text" }
+    "suffix": { "type": "string" },
+    "detail": { "type": "text" },
+    "sortOrder": { "type": "integer", "default": 0 },
+    "active": { "type": "boolean", "default": true }
   }
 }

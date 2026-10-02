@@ -1,0 +1,9 @@
+{
+  "collectionName": "components_shared_quote_banners",
+  "info": { "displayName": "Quote banner" },
+  "options": {},
+  "attributes": {
+    "eyebrow": { "type": "string" },
+    "items": { "type": "component", "repeatable": true, "component": "shared.quote-item" }
+  }
+}

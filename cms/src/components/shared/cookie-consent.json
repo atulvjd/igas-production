@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_shared_cookie_consents",
+  "info": { "displayName": "Cookie consent content" },
+  "options": {},
+  "attributes": {
+    "enabled": { "type": "boolean", "default": true },
+    "title": { "type": "string" },
+    "description": { "type": "text" },
+    "acceptLabel": { "type": "string" },
+    "rejectLabel": { "type": "string" },
+    "manageLabel": { "type": "string" },
+    "essentialLabel": { "type": "string" },
+    "analyticsLabel": { "type": "string" },
+    "marketingLabel": { "type": "string" },
+    "privacyLabel": { "type": "string" },
+    "privacyHref": { "type": "string" }
+  }
+}

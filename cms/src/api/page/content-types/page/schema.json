@@ -21,6 +21,8 @@
         "shared.rich-text",
         "shared.image-text",
         "shared.stats",
+        "shared.quote-banner",
+        "shared.collection-listing",
         "shared.carousel",
         "shared.cta",
         "shared.contact-form"

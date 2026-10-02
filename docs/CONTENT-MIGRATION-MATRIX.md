@@ -1,21 +1,21 @@
 # Content Migration Matrix
 
-Fallback content remains intentionally available until each row is verified in production.
+The frontend reads published Strapi content and renders empty states when a collection or page has no published records. No business copy or collection entries are bundled as fallback content. Technical brand metadata and form/search interface labels remain application-owned.
 
-| Content | Current source | Target source | Status | Owner | Action required |
-|---|---|---|---|---|---|
-| Homepage and Global homepage | CMS Page / static fallback | CMS Page + Site Settings | B/C | Editor | Enter approved copy and media per mode. |
-| About and Contact | CMS Page / static fallback | CMS Page | B/C | Editor | Review copy, contact details, consent text. |
-| Services | Service collection / fallback | Service collection | B/C | Practice leads | Complete approved entries, SEO and relationships. |
-| Industries | Industry collection / fallback | Industry collection | B/C | Practice leads | Complete approved entries, SEO and relationships. |
-| Articles | Article collection / fallback | Article collection | B/C | Editorial | Migrate approved published articles and media. |
-| Careers and jobs | Job collection / fallback | Job collection | B/C | HR | Set status, deadline, application destination. |
-| Offices | Office collection / fallback | Office collection | B/C | Operations | Provide verified address/contact/location. |
-| Leadership | Leadership Profile collection / fallback | Leadership Profile collection | B/C | Leadership/Comms | Approve biography, photo, links. |
-| Navigation | Navigation Item collection / fallback | Navigation Item collection | B/C | Editor | Validate path, ordering, visibility and mode. |
-| Footer | Footer collection / fallback | Footer collection | B/C | Editor/Legal | Enter approved links and copyright. |
-| SEO and OG | CMS SEO / static metadata | CMS SEO | B/C | Editorial | Verify titles, descriptions, canonical and media. |
-| Images and documents | URLs/static assets | Strapi Media Library / approved storage | C | Client | Supply approved inventory, alt text and rights. |
-| Legal and privacy copy | Static fallback | CMS Page or legal-owned source | E | Legal | Approve jurisdictional language before publishing. |
-| Cookie/search UI labels | Application code | Application-owned | B | Product | Retain unless product decision changes behavior. |
-| Production domains/providers | Environment unset | Deployment configuration | D | Client/DevOps | Approve domains, provider contracts and secrets. |
+| Content | Strapi schema | Frontend consumption | Fallback behavior | CMS population needed |
+|---|---|---|---|---|
+| India and Global homepages | Page with Dynamic Zone: Hero, Rich text, Image and text, Stats, Quote banner, Carousel, CTA, Contact form, Collection listing; per-mode SEO | `/` and `/global`; Collection listing sections read live published services, industries, articles, open jobs, offices, or leadership records | Missing page shows content unavailable; empty collection listing shows empty state | Publish `/` in India mode and `/global` in Global mode; add approved sections and collection sources |
+| About | Page Dynamic Zone and SEO | `/about` and `/global/about` | No fabricated About copy; missing page shows unavailable state | Publish page sections, media, and SEO in each mode |
+| Contact | Page Contact form section; Site Setting has contact copy, contacts, consent, privacy note | `/contact` and `/global/contact` | Form is not shown without configured CMS consent; absent editorial content has unavailable state | Add verified contact details, approved consent/privacy copy, and contact sections |
+| Services and industries | Published Service and Industry collections with media, full content, related records, SEO | Listings, detail routes, and builder collection sections | Empty collection shows no-content state; missing detail is not found | Migrate/publish approved records, descriptions, media, relationships, and SEO |
+| Articles | Published Article collection with content blocks, featured media, SEO | `/articles`, `/latest-thinking` compatibility listing, and detail routes | No static articles; empty state or not found | Publish approved articles and metadata |
+| Careers | Published Job collection with application status, office relation, SEO | `/careers` listing, open job details, and page-builder listings | Only open roles appear; no fallback jobs | Populate verified open jobs and application details |
+| Offices and leadership | Published Office and Leadership Profile collections with media and SEO | Directory/detail routes and page-builder listings | Empty state or not found | Populate verified office/profile information, media, and metadata |
+| Navigation | Navigation Item collection by mode with visibility, order, CTA/group fields | Header desktop and mobile navigation | Missing items produce no invented links | Configure visible menu entries and CTA per mode |
+| Footer | Footer collection, repeatable columns/links/social links, contact and newsletter labels | Footer across routes | Missing fields/links are omitted | Add approved footer text, links, contact, newsletter labels, and copyright |
+| Cookie consent | Site Setting `cookieConsent` component | Banner only when enabled and fully configured | Disabled/partial settings hide the banner | Set approved copy, choices/categories, and privacy URL |
+| SEO and structured data | Shared SEO components on Pages and collections; Site Setting default SEO | Metadata, canonical/robots, sitemap, Organization JSON-LD | Per-record SEO, then CMS default SEO, then neutral technical metadata | Review title, description, canonical, social image, indexing configuration |
+| Statistics and quote banners | `shared.stats` + ordered `shared.stat-item`; `shared.quote-banner` + `shared.quote-item` | Page Builder sections; inactive items excluded | No static metrics or quotes | Enter approved metrics/quotes and ordering in homepage sections |
+| Images and documents | Strapi Media Library components | Hero, article, office, profile, and section media | Missing media leaves image area blank/omitted | Supply approved assets, alt text, captions, and usage rights |
+| Legal/privacy copy | Page Dynamic Zone and cookie privacy link | Legal page routes and consent link | No invented legal wording | Legal team to supply/publish approved jurisdictional language |
+| Production origins and API | Deployment environment | CMS access, mode routing, indexing, canonical/sitemap origins | CMS unavailable state; indexing disabled without explicit configuration | Configure Strapi URL/token, approved site origins, and indexing policy |

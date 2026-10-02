@@ -12,7 +12,7 @@ function Blocks({ content }: { content?: ArticleContentBlock[] }) {
 }
 
 export function LeadershipListingPage({ profiles, mode }: { profiles: CmsLeadership[]; mode: SiteMode }) {
-  return <div className="igas-site"><Header mode={mode} /><main className="inner-page"><div className="container page-intro"><p className="eyebrow">Who we are</p><h1>The people behind the perspective.</h1><p className="lead">Meet the senior team bringing judgment, sector depth and international experience to the decisions that matter.</p></div><div className="container listing-grid">{profiles.map((profile) => <Link className="listing-card" href={`/leadership/${profile.slug}`} key={profile.slug}>{profile.media && <div className="article-image" style={{ backgroundImage: `url('${profile.media.src}')` }} /> }<span>{profile.position}</span><h2>{profile.name}</h2><ArrowUpRight /></Link>)}</div></main><Footer mode={mode} /></div>
+  return <div className="igas-site"><Header mode={mode} /><main className="inner-page"><div className="container page-intro"><p className="eyebrow">Leadership</p><h1>Leadership</h1></div><div className="container listing-grid">{profiles.map((profile) => <Link className="listing-card" href={`/leadership/${profile.slug}`} key={profile.slug}>{profile.media && <div className="article-image" style={{ backgroundImage: `url('${profile.media.src}')` }} /> }<span>{profile.position}</span><h2>{profile.name}</h2><ArrowUpRight /></Link>)}</div></main><Footer mode={mode} /></div>
 }
 
 export function LeadershipDetailPage({ profile, mode }: { profile: CmsLeadership; mode: SiteMode }) {

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: siteDescription,
   robots: isIndexingEnabled() ? undefined : { index: false, follow: false },
   alternates: { canonical: '/' },
-  openGraph: { type: 'website', siteName, title: siteName, description: siteDescription, url: absoluteUrl('/'), images: [{ url: absoluteUrl('/og-image.svg'), width: 1200, height: 630, alt: 'IGAS Global — independent advisory for consequential decisions' }] },
+  openGraph: { type: 'website', siteName, title: siteName, description: siteDescription, url: absoluteUrl('/'), images: [{ url: absoluteUrl('/og-image.svg'), width: 1200, height: 630, alt: 'IGAS Global' }] },
   twitter: { card: 'summary_large_image', title: siteName, description: siteDescription, images: [absoluteUrl('/og-image.svg')] },
   generator: siteName,
   icons: {

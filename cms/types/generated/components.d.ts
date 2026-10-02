@@ -29,6 +29,24 @@ export interface SharedCarouselSlide extends Struct.ComponentSchema {
   };
 }
 
+export interface SharedCollectionListing extends Struct.ComponentSchema {
+  collectionName: 'components_shared_collection_listings';
+  info: {
+    displayName: 'Collection listing';
+  };
+  attributes: {
+    eyebrow: Schema.Attribute.String;
+    featuredOnly: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    intro: Schema.Attribute.Text;
+    limit: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<6>;
+    source: Schema.Attribute.Enumeration<
+      ['services', 'industries', 'articles', 'jobs', 'offices', 'leadership']
+    > &
+      Schema.Attribute.Required;
+    title: Schema.Attribute.String;
+  };
+}
+
 export interface SharedContactForm extends Struct.ComponentSchema {
   collectionName: 'components_shared_contact_forms';
   info: {
@@ -41,6 +59,26 @@ export interface SharedContactForm extends Struct.ComponentSchema {
     eyebrow: Schema.Attribute.String;
     intro: Schema.Attribute.Text;
     successMessage: Schema.Attribute.String;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface SharedCookieConsent extends Struct.ComponentSchema {
+  collectionName: 'components_shared_cookie_consents';
+  info: {
+    displayName: 'Cookie consent content';
+  };
+  attributes: {
+    acceptLabel: Schema.Attribute.String;
+    analyticsLabel: Schema.Attribute.String;
+    description: Schema.Attribute.Text;
+    enabled: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    essentialLabel: Schema.Attribute.String;
+    manageLabel: Schema.Attribute.String;
+    marketingLabel: Schema.Attribute.String;
+    privacyHref: Schema.Attribute.String;
+    privacyLabel: Schema.Attribute.String;
+    rejectLabel: Schema.Attribute.String;
     title: Schema.Attribute.String;
   };
 }
@@ -58,6 +96,18 @@ export interface SharedCta extends Struct.ComponentSchema {
     theme: Schema.Attribute.Enumeration<['light', 'dark', 'accent']> &
       Schema.Attribute.DefaultTo<'dark'>;
     title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface SharedFooterColumn extends Struct.ComponentSchema {
+  collectionName: 'components_shared_footer_columns';
+  info: {
+    displayName: 'Footer column';
+  };
+  attributes: {
+    heading: Schema.Attribute.String & Schema.Attribute.Required;
+    links: Schema.Attribute.Component<'shared.footer-link', true>;
+    order: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
   };
 }
 
@@ -87,6 +137,7 @@ export interface SharedHero extends Struct.ComponentSchema {
     imageUrl: Schema.Attribute.String;
     intro: Schema.Attribute.Text;
     title: Schema.Attribute.String & Schema.Attribute.Required;
+    videoUrl: Schema.Attribute.String;
   };
 }
 
@@ -118,6 +169,31 @@ export interface SharedMedia extends Struct.ComponentSchema {
     alt: Schema.Attribute.String;
     caption: Schema.Attribute.Text;
     file: Schema.Attribute.Media<'images'>;
+  };
+}
+
+export interface SharedQuoteBanner extends Struct.ComponentSchema {
+  collectionName: 'components_shared_quote_banners';
+  info: {
+    displayName: 'Quote banner';
+  };
+  attributes: {
+    eyebrow: Schema.Attribute.String;
+    items: Schema.Attribute.Component<'shared.quote-item', true>;
+  };
+}
+
+export interface SharedQuoteItem extends Struct.ComponentSchema {
+  collectionName: 'components_shared_quote_items';
+  info: {
+    displayName: 'Quote item';
+  };
+  attributes: {
+    active: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    author: Schema.Attribute.String;
+    quote: Schema.Attribute.Text & Schema.Attribute.Required;
+    sortOrder: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    source: Schema.Attribute.String;
   };
 }
 
@@ -182,8 +258,11 @@ export interface SharedStatItem extends Struct.ComponentSchema {
     displayName: 'Stat item';
   };
   attributes: {
+    active: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     detail: Schema.Attribute.Text;
     label: Schema.Attribute.String & Schema.Attribute.Required;
+    sortOrder: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    suffix: Schema.Attribute.String;
     value: Schema.Attribute.String & Schema.Attribute.Required;
   };
 }
@@ -206,12 +285,17 @@ declare module '@strapi/strapi' {
     export interface ComponentSchemas {
       'shared.carousel': SharedCarousel;
       'shared.carousel-slide': SharedCarouselSlide;
+      'shared.collection-listing': SharedCollectionListing;
       'shared.contact-form': SharedContactForm;
+      'shared.cookie-consent': SharedCookieConsent;
       'shared.cta': SharedCta;
+      'shared.footer-column': SharedFooterColumn;
       'shared.footer-link': SharedFooterLink;
       'shared.hero': SharedHero;
       'shared.image-text': SharedImageText;
       'shared.media': SharedMedia;
+      'shared.quote-banner': SharedQuoteBanner;
+      'shared.quote-item': SharedQuoteItem;
       'shared.rich-text': SharedRichText;
       'shared.seo': SharedSeo;
       'shared.social-link': SharedSocialLink;

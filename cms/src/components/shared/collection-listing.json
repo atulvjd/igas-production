@@ -1,0 +1,13 @@
+{
+  "collectionName": "components_shared_collection_listings",
+  "info": { "displayName": "Collection listing" },
+  "options": {},
+  "attributes": {
+    "source": { "type": "enumeration", "enum": ["services", "industries", "articles", "jobs", "offices", "leadership"], "required": true },
+    "eyebrow": { "type": "string" },
+    "title": { "type": "string" },
+    "intro": { "type": "text" },
+    "limit": { "type": "integer", "default": 6 },
+    "featuredOnly": { "type": "boolean", "default": false }
+  }
+}

@@ -1,7 +1,7 @@
 import type { SiteMode } from '@/lib/igas-data'
 
 export const siteName = 'IGAS Global'
-export const siteDescription = 'Independent advisory for consequential decisions across India and the world.'
+export const siteDescription = 'Official IGAS website.'
 
 export function getSiteUrl() {
   const configured = process.env.NEXT_PUBLIC_SITE_URL?.trim()

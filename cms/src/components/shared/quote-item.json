@@ -1,0 +1,12 @@
+{
+  "collectionName": "components_shared_quote_items",
+  "info": { "displayName": "Quote item" },
+  "options": {},
+  "attributes": {
+    "quote": { "type": "text", "required": true },
+    "author": { "type": "string" },
+    "source": { "type": "string" },
+    "sortOrder": { "type": "integer", "default": 0 },
+    "active": { "type": "boolean", "default": true }
+  }
+}
