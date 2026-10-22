@@ -1,0 +1,15 @@
+{
+  "kind": "collectionType",
+  "collectionName": "focus_areas",
+  "info": { "singularName": "focus-area", "pluralName": "focus-areas", "displayName": "Focus area" },
+  "options": { "draftAndPublish": true },
+  "pluginOptions": {},
+  "attributes": {
+    "title": { "type": "string", "required": true },
+    "slug": { "type": "uid", "targetField": "title", "required": true },
+    "description": { "type": "text" },
+    "industries": { "type": "relation", "relation": "manyToMany", "target": "api::industry.industry" },
+    "mode": { "type": "enumeration", "enum": ["india", "global"], "default": "india" },
+    "sortOrder": { "type": "integer", "default": 0 }
+  }
+}

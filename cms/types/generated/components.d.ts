@@ -172,6 +172,44 @@ export interface SharedMedia extends Struct.ComponentSchema {
   };
 }
 
+export interface SharedMegaMenu extends Struct.ComponentSchema {
+  collectionName: 'components_shared_mega_menus';
+  info: {
+    displayName: 'Mega menu content';
+  };
+  attributes: {
+    ctaHref: Schema.Attribute.String;
+    ctaLabel: Schema.Attribute.String;
+    description: Schema.Attribute.Text;
+    label: Schema.Attribute.String & Schema.Attribute.Required;
+    section: Schema.Attribute.Enumeration<
+      [
+        'what-we-do',
+        'where-we-focus',
+        'who-we-are',
+        'latest-thinking',
+        'careers',
+      ]
+    > &
+      Schema.Attribute.Required;
+    sortOrder: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface SharedQuote extends Struct.ComponentSchema {
+  collectionName: 'components_shared_quotes';
+  info: {
+    displayName: 'Quote / banner';
+  };
+  attributes: {
+    author: Schema.Attribute.String;
+    eyebrow: Schema.Attribute.String;
+    quote: Schema.Attribute.Text & Schema.Attribute.Required;
+    signature: Schema.Attribute.Text;
+  };
+}
+
 export interface SharedQuoteBanner extends Struct.ComponentSchema {
   collectionName: 'components_shared_quote_banners';
   info: {
@@ -294,6 +332,8 @@ declare module '@strapi/strapi' {
       'shared.hero': SharedHero;
       'shared.image-text': SharedImageText;
       'shared.media': SharedMedia;
+      'shared.mega-menu': SharedMegaMenu;
+      'shared.quote': SharedQuote;
       'shared.quote-banner': SharedQuoteBanner;
       'shared.quote-item': SharedQuoteItem;
       'shared.rich-text': SharedRichText;

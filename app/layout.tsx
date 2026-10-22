@@ -1,5 +1,5 @@
-import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
+import { ConsentAwareAnalytics } from '@/components/consent-aware-analytics'
 import { absoluteUrl, getSiteUrl, isIndexingEnabled, siteDescription, siteName } from '@/lib/site-url'
 import './globals.css'
 
@@ -45,7 +45,7 @@ export default function RootLayout({
     <html lang="en" className="bg-background">
       <body className="antialiased font-sans">
         {children}
-        {process.env.NODE_ENV === 'production' && <Analytics />}
+        <ConsentAwareAnalytics />
       </body>
     </html>
   )

@@ -18,6 +18,7 @@
     "location": { "type": "string" },
     "office": { "type": "relation", "relation": "manyToOne", "target": "api::office.office" },
     "applicationCTA": { "type": "string" },
+    "applicationUrl": { "type": "string" },
     "applicationStatus": { "type": "enumeration", "enum": ["open", "paused", "closed"], "default": "open" },
     "deadline": { "type": "date" },
     "sortOrder": { "type": "integer", "default": 0 },

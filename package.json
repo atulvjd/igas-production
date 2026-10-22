@@ -12,6 +12,7 @@
     "test:stage4": "node scripts/validate-stage4.mjs",
     "test:stage5": "node scripts/validate-stage5.mjs",
     "test:stage6": "node scripts/validate-stage6.mjs",
+    "test:readiness": "node scripts/test-readiness-fixes.mjs",
     "start:cms": "npm --prefix cms run start",
     "start": "next start"
   },

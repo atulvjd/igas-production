@@ -9,6 +9,7 @@
     "href": { "type": "string", "required": true },
     "group": { "type": "string", "required": true },
     "parentGroup": { "type": "string" },
+    "description": { "type": "text" },
     "menuType": { "type": "enumeration", "enum": ["header", "mobile", "footer"], "default": "header" },
     "external": { "type": "boolean", "default": false },
     "cta": { "type": "boolean", "default": false },

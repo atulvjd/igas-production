@@ -13,19 +13,189 @@
   "attributes": {
     "mode": {
       "type": "enumeration",
-      "enum": ["india", "global"],
+      "enum": [
+        "india",
+        "global"
+      ],
       "required": true,
       "unique": true
     },
-    "contactEmail": { "type": "email" },
-    "contactPhone": { "type": "string" },
-    "contactEyebrow": { "type": "string" },
-    "contactTitle": { "type": "string" },
-    "contactIntro": { "type": "text" },
-    "contactConsent": { "type": "string" },
-    "contactSuccess": { "type": "string" },
-    "contactPrivacyNote": { "type": "text" },
-    "cookieConsent": { "type": "component", "repeatable": false, "component": "shared.cookie-consent" },
-    "seo": { "type": "component", "repeatable": false, "component": "shared.seo" }
+    "contactEmail": {
+      "type": "email"
+    },
+    "contactPhone": {
+      "type": "string"
+    },
+    "contactEyebrow": {
+      "type": "string"
+    },
+    "contactTitle": {
+      "type": "string"
+    },
+    "contactIntro": {
+      "type": "text"
+    },
+    "contactConsent": {
+      "type": "string"
+    },
+    "contactSuccess": {
+      "type": "string"
+    },
+    "contactPrivacyNote": {
+      "type": "text"
+    },
+    "cookieConsent": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.cookie-consent"
+    },
+    "seo": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.seo"
+    },
+    "heroEyebrow": {
+      "type": "string"
+    },
+    "heroTitle": {
+      "type": "string"
+    },
+    "heroIntro": {
+      "type": "text"
+    },
+    "heroCta": {
+      "type": "string"
+    },
+    "heroCtaHref": {
+      "type": "string"
+    },
+    "heroImageUrl": {
+      "type": "string"
+    },
+    "heroImage": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.media"
+    },
+    "statementTitle": {
+      "type": "string"
+    },
+    "statementIntro": {
+      "type": "text"
+    },
+    "statementCtaLabel": {
+      "type": "string"
+    },
+    "statementCtaHref": {
+      "type": "string"
+    },
+    "aboutTitle": {
+      "type": "string"
+    },
+    "aboutText": {
+      "type": "text"
+    },
+    "aboutCtaLabel": {
+      "type": "string"
+    },
+    "aboutCtaHref": {
+      "type": "string"
+    },
+    "aboutImageUrl": {
+      "type": "string"
+    },
+    "aboutImage": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.media"
+    },
+    "presenceTitle": {
+      "type": "string"
+    },
+    "presenceText": {
+      "type": "text"
+    },
+    "careersTitle": {
+      "type": "string"
+    },
+    "careersText": {
+      "type": "text"
+    },
+    "careersImageUrl": {
+      "type": "string"
+    },
+    "careersImage": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.media"
+    },
+    "logo": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.media"
+    },
+    "globalLogo": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.media"
+    },
+    "contactCtaLabel": {
+      "type": "string"
+    },
+    "contactCtaHref": {
+      "type": "string"
+    },
+    "searchLabel": {
+      "type": "string"
+    },
+    "searchPlaceholder": {
+      "type": "string"
+    },
+    "contactConsentText": {
+      "type": "string"
+    },
+    "contactSuccessMessage": {
+      "type": "string"
+    },
+    "cookieTitle": {
+      "type": "string"
+    },
+    "cookieDescription": {
+      "type": "text"
+    },
+    "cookieAcceptLabel": {
+      "type": "string"
+    },
+    "cookieRejectLabel": {
+      "type": "string"
+    },
+    "cookieManageLabel": {
+      "type": "string"
+    },
+    "cookieEssentialLabel": {
+      "type": "string"
+    },
+    "cookieAnalyticsLabel": {
+      "type": "string"
+    },
+    "cookieMarketingLabel": {
+      "type": "string"
+    },
+    "newsletterTitle": {
+      "type": "string"
+    },
+    "footerSignature": {
+      "type": "text"
+    },
+    "megaMenus": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.mega-menu"
+    },
+    "statistics": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.stat-item"
+    }
   }
 }

@@ -1,9 +1,7 @@
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { logOperationalEvent, requestId } from '@/lib/operational'
 
 export const runtime = 'nodejs'
-
-const isSafePublicPath = (path: string) => /^\/(?:[a-z0-9-]+\/)*[a-z0-9-]*$/.test(path)
 
 export async function POST(request: Request) {
   const correlationId = requestId(request)
@@ -13,16 +11,13 @@ export async function POST(request: Request) {
     return Response.json({ error: 'Unauthorized.' }, { status: 401 })
   }
   try {
-    const body = await request.json() as { path?: unknown }
-    const path = typeof body.path === 'string' ? body.path : ''
-    if (!isSafePublicPath(path)) {
-      return Response.json({ error: 'Unsupported path.' }, { status: 400 })
-    }
-    revalidatePath(path)
+    revalidateTag('strapi-content', { expire: 0 })
+    revalidatePath('/[[...slug]]', 'page')
+    revalidatePath('/sitemap.xml')
     logOperationalEvent('revalidation.completed', { correlationId })
     return Response.json({ ok: true })
   } catch {
     logOperationalEvent('revalidation.failed', { correlationId, category: 'request' })
-    return Response.json({ error: 'Invalid revalidation request.' }, { status: 400 })
+    return Response.json({ error: 'Unable to revalidate CMS content.' }, { status: 500 })
   }
 }

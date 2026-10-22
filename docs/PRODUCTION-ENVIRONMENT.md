@@ -6,9 +6,9 @@ No production values are stored in this repository. Keep every secret in the dep
 
 | Variable | Classification | Purpose |
 |---|---|---|
-| `NEXT_PUBLIC_SITE_URL` | PUBLIC | Approved default site origin only. |
-| `NEXT_PUBLIC_INDIA_SITE_URL` | PUBLIC | Approved India origin; optional until domain launch. |
-| `NEXT_PUBLIC_GLOBAL_SITE_URL` | PUBLIC | Approved Global origin; optional until domain launch. |
+| `NEXT_PUBLIC_SITE_URL` | PUBLIC / REQUIRED IN PRODUCTION | Approved HTTPS canonical origin; production builds fail if missing or invalid. |
+| `NEXT_PUBLIC_INDIA_SITE_URL` | PUBLIC | Approved India HTTPS origin; optional when one shared domain is used. |
+| `NEXT_PUBLIC_GLOBAL_SITE_URL` | PUBLIC | Approved Global HTTPS origin; configure together with the India origin for hostname routing. |
 | `ALLOW_INDEXING` | DEPLOYMENT-ONLY | Set `true` only for approved production; defaults to safe no-index. |
 | `STRAPI_URL` | SERVER-ONLY | Next.js-to-Strapi server endpoint. |
 | `STRAPI_API_TOKEN` | SERVER-ONLY | Scoped read-only Strapi token; never public. |
@@ -24,11 +24,15 @@ No API token, provider credential, database password, or webhook/revalidation se
 
 ## Next.js
 
-Public values: `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_INDIA_SITE_URL`, and `NEXT_PUBLIC_GLOBAL_SITE_URL`. Set the latter two only with approved, distinct production origins. `NEXT_PUBLIC_SITE_URL` remains the fallback origin. The public variables must contain URLs only—never tokens or credentials.
+Public values: `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_INDIA_SITE_URL`, and `NEXT_PUBLIC_GLOBAL_SITE_URL`. `NEXT_PUBLIC_SITE_URL` is mandatory for production builds and must be the approved HTTPS origin with no path, query, fragment, username, or password. There is no production fallback domain. India and Global origins are optional for a shared-domain launch; configure both as approved, distinct HTTPS origins to enable hostname routing. Public variables must contain URLs only—never tokens or credentials.
 
 Server-only values: `STRAPI_URL`, `STRAPI_API_TOKEN`, `CONTACT_DELIVERY_MODE`, `CONTACT_WEBHOOK_URL`, `CONTACT_ATTACHMENT_DELIVERY_MODE`, `NEWSLETTER_DELIVERY_MODE`, `NEWSLETTER_WEBHOOK_URL`, and `REVALIDATION_SECRET`.
 
-Use a scoped, read-only Strapi API token only in Next.js server runtime. Contact/newsletter delivery modes are `development` locally; production must set an approved webhook/provider endpoint. Without one, the APIs return 503. A contact attachment is rejected in production unless `CONTACT_ATTACHMENT_DELIVERY_MODE=webhook-base64` has been explicitly approved for the configured private provider endpoint.
+Use a scoped, read-only Strapi API token only in Next.js server runtime. Contact/newsletter delivery modes are `development` locally; production must set an approved webhook/provider endpoint. Without one, the APIs return 503. Contact requests are limited to 5 MiB plus multipart overhead; newsletter JSON requests are limited to 16 KiB. Configure matching edge/WAF limits because platform and proxy limits may run before the application.
+
+The cookie preference is persisted in `igas-consent` for one year. Vercel Analytics is loaded only after opt-in and outgoing events are rejected after the choice is withdrawn. This technical default does not establish whether analytics consent is legally required; have legal/product owners approve the copy, retention, and market-specific behavior. No marketing tracking is connected.
+
+A contact attachment is validated for declared MIME type, extension, and size, but those checks are not malware scanning. The current adapter can send its bytes as base64 only when `CONTACT_ATTACHMENT_DELIVERY_MODE=webhook-base64` is explicitly approved for the configured provider. Do not enable that mode until the endpoint provides private access, scanning, retention/deletion, and incident controls. The repository does not provide those external controls.
 
 Configure Strapi webhooks to `POST /api/revalidate` with `Authorization: Bearer <REVALIDATION_SECRET>` and JSON `{ "path": "/the-updated-path" }`. The endpoint accepts only normalized public path characters, never absolute URLs.
 

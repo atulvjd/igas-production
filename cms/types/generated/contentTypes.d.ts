@@ -501,6 +501,43 @@ export interface ApiArticleArticle extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiFocusAreaFocusArea extends Struct.CollectionTypeSchema {
+  collectionName: 'focus_areas';
+  info: {
+    displayName: 'Focus area';
+    pluralName: 'focus-areas';
+    singularName: 'focus-area';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.Text;
+    industries: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::industry.industry'
+    >;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::focus-area.focus-area'
+    > &
+      Schema.Attribute.Private;
+    mode: Schema.Attribute.Enumeration<['india', 'global']> &
+      Schema.Attribute.DefaultTo<'india'>;
+    publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
+    sortOrder: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiFooterFooter extends Struct.CollectionTypeSchema {
   collectionName: 'footers';
   info: {
@@ -613,6 +650,7 @@ export interface ApiJobJob extends Struct.CollectionTypeSchema {
       ['open', 'paused', 'closed']
     > &
       Schema.Attribute.DefaultTo<'open'>;
+    applicationUrl: Schema.Attribute.String;
     benefits: Schema.Attribute.Blocks;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -706,6 +744,7 @@ export interface ApiNavigationItemNavigationItem
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     cta: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    description: Schema.Attribute.Text;
     external: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     group: Schema.Attribute.String & Schema.Attribute.Required;
     href: Schema.Attribute.String & Schema.Attribute.Required;
@@ -809,6 +848,7 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         'shared.carousel',
         'shared.cta',
         'shared.contact-form',
+        'shared.quote',
       ]
     >;
     seo: Schema.Attribute.Component<'shared.seo', false>;
@@ -880,29 +920,72 @@ export interface ApiSiteSettingSiteSetting extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    aboutCtaHref: Schema.Attribute.String;
+    aboutCtaLabel: Schema.Attribute.String;
+    aboutImage: Schema.Attribute.Component<'shared.media', false>;
+    aboutImageUrl: Schema.Attribute.String;
+    aboutText: Schema.Attribute.Text;
+    aboutTitle: Schema.Attribute.String;
+    careersImage: Schema.Attribute.Component<'shared.media', false>;
+    careersImageUrl: Schema.Attribute.String;
+    careersText: Schema.Attribute.Text;
+    careersTitle: Schema.Attribute.String;
     contactConsent: Schema.Attribute.String;
+    contactConsentText: Schema.Attribute.String;
+    contactCtaHref: Schema.Attribute.String;
+    contactCtaLabel: Schema.Attribute.String;
     contactEmail: Schema.Attribute.Email;
     contactEyebrow: Schema.Attribute.String;
     contactIntro: Schema.Attribute.Text;
     contactPhone: Schema.Attribute.String;
     contactPrivacyNote: Schema.Attribute.Text;
     contactSuccess: Schema.Attribute.String;
+    contactSuccessMessage: Schema.Attribute.String;
     contactTitle: Schema.Attribute.String;
+    cookieAcceptLabel: Schema.Attribute.String;
+    cookieAnalyticsLabel: Schema.Attribute.String;
     cookieConsent: Schema.Attribute.Component<'shared.cookie-consent', false>;
+    cookieDescription: Schema.Attribute.Text;
+    cookieEssentialLabel: Schema.Attribute.String;
+    cookieManageLabel: Schema.Attribute.String;
+    cookieMarketingLabel: Schema.Attribute.String;
+    cookieRejectLabel: Schema.Attribute.String;
+    cookieTitle: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    footerSignature: Schema.Attribute.Text;
+    globalLogo: Schema.Attribute.Component<'shared.media', false>;
+    heroCta: Schema.Attribute.String;
+    heroCtaHref: Schema.Attribute.String;
+    heroEyebrow: Schema.Attribute.String;
+    heroImage: Schema.Attribute.Component<'shared.media', false>;
+    heroImageUrl: Schema.Attribute.String;
+    heroIntro: Schema.Attribute.Text;
+    heroTitle: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::site-setting.site-setting'
     > &
       Schema.Attribute.Private;
+    logo: Schema.Attribute.Component<'shared.media', false>;
+    megaMenus: Schema.Attribute.Component<'shared.mega-menu', true>;
     mode: Schema.Attribute.Enumeration<['india', 'global']> &
       Schema.Attribute.Required &
       Schema.Attribute.Unique;
+    newsletterTitle: Schema.Attribute.String;
+    presenceText: Schema.Attribute.Text;
+    presenceTitle: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
+    searchLabel: Schema.Attribute.String;
+    searchPlaceholder: Schema.Attribute.String;
     seo: Schema.Attribute.Component<'shared.seo', false>;
+    statementCtaHref: Schema.Attribute.String;
+    statementCtaLabel: Schema.Attribute.String;
+    statementIntro: Schema.Attribute.Text;
+    statementTitle: Schema.Attribute.String;
+    statistics: Schema.Attribute.Component<'shared.stat-item', true>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1421,6 +1504,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
       'api::article.article': ApiArticleArticle;
+      'api::focus-area.focus-area': ApiFocusAreaFocusArea;
       'api::footer.footer': ApiFooterFooter;
       'api::industry.industry': ApiIndustryIndustry;
       'api::job.job': ApiJobJob;

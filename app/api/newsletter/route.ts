@@ -1,17 +1,36 @@
 import { subscribeToNewsletter, validateNewsletterEmail } from '@/lib/newsletter'
 import { logOperationalEvent, requestId } from '@/lib/operational'
 import { rateLimit } from '@/lib/rate-limit'
+import { readRequestBody, RequestBodyTooLargeError } from '@/lib/request-body'
 
 export const runtime = 'nodejs'
+const NEWSLETTER_MAX_REQUEST_SIZE = 16 * 1024
 
 export async function POST(request: Request) {
   const correlationId = requestId(request)
   const throttle = rateLimit(request, 'newsletter', 8, 10 * 60 * 1000)
   if (!throttle.allowed) return Response.json({ error: 'Please wait before subscribing again.' }, { status: 429, headers: { 'Retry-After': String(throttle.retryAfter) } })
+  let body: unknown
   try {
-    const body = await request.json() as { email?: unknown }
-    const result = validateNewsletterEmail(body.email)
-    if (result.error) { logOperationalEvent('newsletter.rejected', { correlationId, category: 'validation' }); return Response.json({ error: result.error }, { status: 400 }) }
+    const bytes = await readRequestBody(request, NEWSLETTER_MAX_REQUEST_SIZE)
+    body = JSON.parse(new TextDecoder().decode(bytes))
+  } catch (error) {
+    const tooLarge = error instanceof RequestBodyTooLargeError
+    logOperationalEvent('newsletter.rejected', { correlationId, category: tooLarge ? 'request_size' : 'malformed_request' })
+    return Response.json(
+      { error: tooLarge ? 'The subscription request is too large.' : 'Enter your email address to subscribe.' },
+      { status: tooLarge ? 413 : 400 },
+    )
+  }
+
+  const email = body && typeof body === 'object' ? (body as { email?: unknown }).email : undefined
+  const result = validateNewsletterEmail(email)
+  if (result.error) {
+    logOperationalEvent('newsletter.rejected', { correlationId, category: 'validation' })
+    return Response.json({ error: result.error }, { status: 400 })
+  }
+
+  try {
     await subscribeToNewsletter(result.email!)
     logOperationalEvent('newsletter.subscribed', { correlationId, development: process.env.NEWSLETTER_DELIVERY_MODE === 'development' })
     return Response.json({ ok: true })

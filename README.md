@@ -32,13 +32,17 @@ Strapi lives in `cms/` and uses SQLite for local development. From this project 
 npm run dev:cms
 ```
 
-Open [http://localhost:1337/admin](http://localhost:1337/admin), create the first administrator, and add published Site settings, Services, Industries, Articles, Pages, Jobs, Offices, Leadership profiles, Navigation items, and Footers. Create one published Site setting for each mode (`india` and `global`). The Site setting controls shared defaults such as the homepage hero, imagery, newsletter title, footer signature, and contact details.
+Open [http://localhost:1337/admin](http://localhost:1337/admin), create the first administrator, and add published Site settings, Services, Industries, Focus areas, Articles, Pages, Jobs, Offices, Leadership profiles, Navigation items, and Footers. Create one published Site setting for each mode (`india` and `global`). Site settings control the homepage copy and imagery, Careers and About copy, footer signature, contact details, and the labels, descriptions, headings, and calls to action used by each expanded header menu.
+
+Manage the “Where we focus” categories in **Focus areas**: create and publish each category, set its display order and mode, and relate the Industries that should appear beneath it. Existing industry records not assigned to a focus area remain accessible from the focus menu. In each Site setting, edit the repeatable **Mega menu content** components to update What we do, Where we focus, Who we are, Latest thinking, and Careers copy. Create Navigation items with group `who-we-are` to define the Who we are menu links; `parentGroup` forms subgroups and `description` supplies the subgroup summary. Add the read permission for Focus areas to the website's Strapi API token so published categories and their related industries can be read.
 
 Pages are the fully editable page-builder layer. Set `path` to the URL you want to control (`/` for the India homepage or `/global` for the global homepage), choose the mode, and add sections to the `sections` dynamic zone. Editors can add, remove, reorder, and configure Hero, Rich text, Image and text, Stats, Carousel, and Call to action sections. Carousel slides are repeatable, so the homepage carousel can be changed entirely from the admin panel without code.
 
-Services, Industries, and Articles control the corresponding navigation, listings, detail pages, and insight content. A published Page takes precedence for its path; existing frontend pages remain as a fallback until each page is migrated into the builder.
+Services, Industries, Focus areas, Articles, Jobs, Offices, Leadership profiles, Navigation items, Footers, Site settings, and Pages are normalized by the server-side adapter and rendered in the existing site components. Built-in routes retain their existing page layouts and consume collection and Site setting content; published Page Builder entries control custom paths. Empty collections render empty states or hide optional sections. No mock business records are used when the CMS is empty or unavailable.
 
-Create a read-only API token in Strapi under Settings, then copy `.env.example` to `.env.local` and set `STRAPI_API_TOKEN`. The website keeps its static defaults when Strapi is unavailable, so publishing can be staged safely before connecting production.
+Create a read-only API token in Strapi under Settings, then copy `.env.example` to `.env.local` and set `STRAPI_API_TOKEN`. Set the same strong `REVALIDATION_SECRET` in the website's `.env.local` and the CMS's `cms/.env`; set `NEXT_APP_URL` in `cms/.env` to the website origin. On startup, Strapi configures a webhook for content entry and media changes. Published CMS changes then invalidate the website's CMS cache and pages immediately; the 60-second fetch revalidation remains a fallback.
+
+Only published Strapi records are public. Save and publish CMS content to make it appear on the website; drafts are intentionally excluded. Legacy content without a `mode` is shared across India and Global, while records explicitly assigned a mode are only shown on that site.
 
 For clearly marked, non-destructive local demo records, start Strapi with:
 
@@ -60,9 +64,17 @@ Stage 3 contract checks are available with:
 npm run test:stage3
 ```
 
+The readiness regression checks for request limits, consent validation, route path guards, and analytics gating run with:
+
+```bash
+npm run test:readiness
+```
+
 Contact and newsletter delivery are server-only adapters. Local development can use `CONTACT_DELIVERY_MODE=development` and `NEWSLETTER_DELIVERY_MODE=development`; production requires `CONTACT_WEBHOOK_URL` and/or `NEWSLETTER_WEBHOOK_URL` to be configured. Contact attachments are limited to PDF, DOC, and DOCX files up to 5 MB, and only sanitized attachment metadata is sent through the generic webhook adapter until a file-storage/email provider is selected.
 
-The Next.js home page reads CMS content when both `STRAPI_URL` and `STRAPI_API_TOKEN` are configured. Until then, it uses the existing static content as a fallback.
+Production builds require `NEXT_PUBLIC_SITE_URL` to be set to the approved HTTPS origin. The analytics preference is opt-in and stored in a first-party cookie; marketing analytics is not connected. See [production environment](docs/PRODUCTION-ENVIRONMENT.md) for the analytics, request-size, attachment, and launch configuration boundaries.
+
+The website reads published CMS content when both `STRAPI_URL` and `STRAPI_API_TOKEN` are configured. When the CMS is unavailable or a collection has no published records, business-content lists stay empty and use their empty states; only technical UI defaults and brand assets remain as fallbacks. See [CMS integration status](docs/CMS-INTEGRATION-STATUS.md) for the collection mapping and current live verification limits.
 ## Learn More
 
 To learn more, take a look at the following resources:

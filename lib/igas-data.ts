@@ -1,12 +1,5 @@
-/** Shared frontend data contracts. Business records are fetched from Strapi. */
+/** Shared application types for normalized Strapi content. */
 export type SiteMode = 'india' | 'global'
-
-export interface ArticleContentBlock {
-  type: string
-  level?: number
-  format?: string
-  children?: Array<{ type?: string; text?: string }>
-}
 
 export interface Service {
   title: string
@@ -18,7 +11,6 @@ export interface Service {
   mode?: SiteMode
   updatedAt?: string
   seo?: unknown
-  media?: { src: string; alt: string }
 }
 
 export interface Industry {
@@ -32,7 +24,20 @@ export interface Industry {
   seo?: unknown
 }
 
-export interface Media { url: string; alt?: string; width?: number; height?: number; caption?: string }
+export interface Media {
+  url: string
+  alt?: string
+  width?: number
+  height?: number
+  caption?: string
+}
+
+export interface ArticleContentBlock {
+  type: string
+  level?: number
+  format?: string
+  children?: Array<{ type?: string; text?: string }>
+}
 
 export interface Article {
   title: string
@@ -50,5 +55,15 @@ export interface Article {
   seo?: unknown
 }
 
-export interface Office { city: string; country: string; detail: string }
-export interface Job { title: string; location: string; type: string; slug: string }
+export interface Office {
+  city: string
+  country: string
+  detail: string
+}
+
+export interface Job {
+  title: string
+  location: string
+  type: string
+  slug: string
+}

@@ -1,13 +1,31 @@
 {
   "collectionName": "components_shared_stat_items",
-  "info": { "displayName": "Stat item" },
+  "info": {
+    "displayName": "Stat item"
+  },
   "options": {},
   "attributes": {
-    "value": { "type": "string", "required": true },
-    "label": { "type": "string", "required": true },
-    "suffix": { "type": "string" },
-    "detail": { "type": "text" },
-    "sortOrder": { "type": "integer", "default": 0 },
-    "active": { "type": "boolean", "default": true }
+    "value": {
+      "type": "string",
+      "required": true
+    },
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "suffix": {
+      "type": "string"
+    },
+    "detail": {
+      "type": "text"
+    },
+    "sortOrder": {
+      "type": "integer",
+      "default": 0
+    },
+    "active": {
+      "type": "boolean",
+      "default": true
+    }
   }
 }

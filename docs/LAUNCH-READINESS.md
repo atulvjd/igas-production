@@ -6,7 +6,7 @@ No production deployment, approved domains, credentials, client content/media, l
 
 | Severity | Blocker | Owner | Required action | Status |
 |---|---|---|---|---|
-| CRITICAL | Hosting, India/Global domains and DNS absent | Client / DevOps | Provide approved origins, deploy targets and DNS ownership; exercise hostname/canonical checks. | NOT CONFIGURED |
+| CRITICAL | Hosting, India/Global domains and DNS absent | Client / DevOps | Provide approved HTTPS canonical origin in `NEXT_PUBLIC_SITE_URL`, approved India/Global origins if separate, deploy targets and DNS ownership; exercise hostname/canonical checks. | NOT CONFIGURED |
 | CRITICAL | Contact provider absent | Client / Operations | Supply approved server-side provider configuration and complete a controlled delivery/timeout/failure test. | NOT CONFIGURED |
 | HIGH | Newsletter provider absent | Client / Operations | Supply approved server-side provider configuration and test valid, duplicate, timeout and failure cases. | NOT CONFIGURED |
 | CRITICAL | Private attachment storage/scanning/retention absent | Client / Security | Approve private provider, malware scanning and retention policy; test no public exposure and cleanup. | NOT CONFIGURED |

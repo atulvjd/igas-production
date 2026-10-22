@@ -1,0 +1,11 @@
+{
+  "collectionName": "components_shared_quotes",
+  "info": { "displayName": "Quote / banner" },
+  "options": {},
+  "attributes": {
+    "eyebrow": { "type": "string" },
+    "quote": { "type": "text", "required": true },
+    "author": { "type": "string" },
+    "signature": { "type": "text" }
+  }
+}

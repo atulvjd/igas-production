@@ -1,37 +1,42 @@
 import type { MetadataRoute } from 'next'
-import { absoluteUrl, isIndexingEnabled } from '@/lib/site-url'
+import { absoluteUrl, getSiteOrigin, hasSeparateSiteOrigins, isIndexingEnabled } from '@/lib/site-url'
 import { getStrapiContent, getStrapiPagePaths } from '@/lib/strapi'
+import { builtInStaticRoutes, isValidCmsPagePath } from '@/lib/routes'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   if (!isIndexingEnabled()) return []
-  const modes = ['india', 'global'] as const
-  const [contents, pagePaths] = await Promise.all([
-    Promise.all(modes.map((mode) => getStrapiContent(mode))),
-    Promise.all(modes.map((mode) => getStrapiPagePaths(mode))),
+  const separateOrigins = hasSeparateSiteOrigins()
+  const modes = separateOrigins ? ['india', 'global'] as const : ['india'] as const
+  const entries: Array<{ path: string; mode: 'india' | 'global'; lastModified?: string }> = modes.flatMap((mode) => builtInStaticRoutes
+    .filter((path) => path !== '/global' && path !== '/articles')
+    .map((path) => ({ path, mode })))
+  if (!separateOrigins) entries.push({ path: '/global', mode: 'global' })
+
+  const [india, globalContent, indiaPages, globalPages] = await Promise.all([
+    getStrapiContent('india'),
+    separateOrigins ? getStrapiContent('global') : Promise.resolve(undefined),
+    getStrapiPagePaths('india'),
+    separateOrigins ? getStrapiPagePaths('global') : Promise.resolve(undefined),
   ])
-  const entries: Array<{ path: string; mode: (typeof modes)[number]; lastModified?: string }> = []
-  modes.forEach((mode, index) => {
-    const content = contents[index]
-    const pages = pagePaths[index]
-    pages.forEach((page) => entries.push({ path: page.path, mode, lastModified: page.lastModified }))
-    const add = (items: Array<{ slug: string; updatedAt?: string }>, prefix: string) => items.forEach((item) => entries.push({ path: `${prefix}/${item.slug}`, mode, lastModified: item.updatedAt }))
-    add(content.services, '/services')
-    add(content.industries, '/industries')
-    add(content.articles, '/articles')
-    add(content.jobs.filter((job) => job.applicationStatus === 'open'), '/careers')
-    add(content.offices, '/offices')
-    add(content.leadership, '/leadership')
-    if (content.services.length) entries.push({ path: '/services', mode })
-    if (content.industries.length) entries.push({ path: '/industries', mode })
-    if (content.articles.length) entries.push({ path: '/articles', mode })
-    if (content.jobs.some((job) => job.applicationStatus === 'open')) entries.push({ path: '/careers', mode })
-    if (content.offices.length) entries.push({ path: '/offices', mode })
-    if (content.leadership.length) entries.push({ path: '/leadership', mode })
-  })
+  const global = globalContent || india
+  const publishedGlobalPages = globalPages || []
+  const addCollection = (mode: 'india' | 'global', items: Array<{ slug: string; updatedAt?: string }>, prefix: string) => items.forEach((item) => entries.push({ path: `${prefix}/${item.slug}`, mode, lastModified: item.updatedAt }))
+  for (const mode of modes) {
+    const content = mode === 'india' ? india : global
+    addCollection(mode, content.services, '/services')
+    addCollection(mode, content.industries, '/industries')
+    addCollection(mode, content.articles, '/latest-thinking')
+    addCollection(mode, content.jobs, '/careers')
+    addCollection(mode, content.offices, '/offices')
+    addCollection(mode, content.leadership, '/leadership')
+  }
+  indiaPages.filter((page) => isValidCmsPagePath(page.path)).forEach((page) => entries.push({ path: page.path, mode: 'india', lastModified: page.lastModified }))
+  publishedGlobalPages.filter((page) => isValidCmsPagePath(page.path) && separateOrigins).forEach((page) => entries.push({ path: page.path, mode: 'global', lastModified: page.lastModified }))
   const seen = new Set<string>()
   return entries.flatMap((entry) => {
     const url = absoluteUrl(entry.path, entry.mode)
-    if (seen.has(url)) return []
+    const siteOrigin = getSiteOrigin(entry.mode).origin
+    if (!url.startsWith(`${siteOrigin}/`) || seen.has(url)) return []
     seen.add(url)
     return [{ url, lastModified: entry.lastModified ? new Date(entry.lastModified) : undefined }]
   })

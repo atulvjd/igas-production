@@ -1,4 +1,5 @@
 export const CONTACT_MAX_FILE_SIZE = 5 * 1024 * 1024
+export const CONTACT_MAX_REQUEST_SIZE = CONTACT_MAX_FILE_SIZE + 64 * 1024
 export const CONTACT_ALLOWED_FILE_TYPES = new Set(['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'])
 export const CONTACT_ALLOWED_FILE_EXTENSIONS = new Set(['pdf', 'doc', 'docx'])
 
@@ -23,7 +24,7 @@ export function validateContactForm(form: FormData): { value?: ValidatedContactS
 
   if (!name || !email || !message) return { error: 'Name, email, and message are required.' }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { error: 'Enter a valid work email.' }
-  if (!consent) return { error: 'Consent is required.' }
+  if (!consent) return { error: 'Please confirm that IGAS may contact you about this enquiry.' }
 
   let attachmentMeta: ContactSubmission['attachment']
   if (attachment instanceof File && attachment.size > 0) {

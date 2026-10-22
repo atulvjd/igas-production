@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_shared_mega_menus",
+  "info": { "displayName": "Mega menu content" },
+  "options": {},
+  "attributes": {
+    "section": { "type": "enumeration", "enum": ["what-we-do", "where-we-focus", "who-we-are", "latest-thinking", "careers"], "required": true },
+    "label": { "type": "string", "required": true },
+    "title": { "type": "string", "required": true },
+    "description": { "type": "text" },
+    "ctaLabel": { "type": "string" },
+    "ctaHref": { "type": "string" },
+    "sortOrder": { "type": "integer", "default": 0 }
+  }
+}
