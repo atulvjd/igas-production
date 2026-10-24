@@ -11,6 +11,7 @@
   },
   "pluginOptions": {},
   "attributes": {
+    "sortOrder": { "type": "integer", "default": 0, "min": 0 },
     "title": {
       "type": "string",
       "required": true

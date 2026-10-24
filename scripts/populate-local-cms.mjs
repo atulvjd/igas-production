@@ -36,7 +36,8 @@ const ids = (name, slugs) => slugs.map((slug) => bySlug(name, slug)?.documentId)
 async function save(name, match, data, publish = true) {
   const existing = snapshot[name].draft.find(match)
   const endpoint = existing ? `${name}/${existing.documentId}` : name
-  const record = await api(`${endpoint}?status=${publish ? 'published' : 'draft'}`, existing ? 'PUT' : 'POST', data)
+  // Published and draft component rows have different IDs; submit component values.
+  const record = await api(`${endpoint}?status=${publish ? 'published' : 'draft'}`, existing ? 'PUT' : 'POST', cleanComponent(data))
   const item = { collection: name, documentId: record.documentId, title: record.title || record.name || record.label || record.mode, status: publish ? 'published' : 'draft', action: existing ? 'updated' : 'created' }
   journal.push(item)
   await fs.writeFile(path.join(backupDir, 'changes.json'), JSON.stringify(journal, null, 2), { mode: 0o600 })

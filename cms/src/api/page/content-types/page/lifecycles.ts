@@ -3,19 +3,28 @@ import { errors } from '@strapi/utils'
 type PageLifecycleEvent = {
   params: {
     data: Record<string, unknown>
-    where?: { id?: number }
+    where?: { id?: number; documentId?: string }
   }
 }
 
 async function ensurePathModeIsUnique(event: PageLifecycleEvent) {
-  const { path, mode } = event.params.data
+  const { data, where } = event.params
+  const query = strapi.db.query('api::page.page')
+  const current = where?.id || where?.documentId
+    ? await query.findOne({ where, select: ['id', 'documentId', 'path', 'mode'] })
+    : null
+  const path = data.path ?? current?.path
+  const mode = data.mode ?? current?.mode
+  const documentId = data.documentId ?? current?.documentId
   if (typeof path !== 'string' || typeof mode !== 'string') return
 
-  const existing = await strapi.db.query('api::page.page').findOne({
+  const existing = await query.findOne({
     where: {
       path,
       mode,
-      ...(event.params.where?.id ? { id: { $ne: event.params.where.id } } : {}),
+      // Draft and published rows belong to the same Strapi 5 document.
+      ...(typeof documentId === 'string' ? { documentId: { $ne: documentId } }
+        : where?.id ? { id: { $ne: where.id } } : {}),
     },
   })
 

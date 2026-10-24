@@ -51,6 +51,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug?: st
   const itemSeo = item && 'seo' in item && item.seo && typeof item.seo === 'object' ? item.seo as CmsSEO : undefined
   const pageSeo = cmsPage?.seo
   const globalSeo = cmsContent.settings.seo
+  const homeSeo = pathname === '/' || pathname === '/global' ? globalSeo : undefined
   const itemDescription = item && 'excerpt' in item ? item.excerpt
     : item && 'shortDescription' in item ? item.shortDescription
       : item && 'description' in item && typeof item.description === 'string' ? item.description
@@ -59,17 +60,17 @@ export async function generateMetadata({ params }: { params: Promise<{ slug?: st
             : ''
   const itemTitle = item && 'name' in item ? item.name : item?.title
   const meta = cmsPage ? { title: cmsPage.title, description: cmsPage.description } : item ? { title: itemTitle || 'IGAS', description: itemDescription } : pageMeta[pathname] || { title: 'Page not found', description: 'The requested page is unavailable.' }
-  const title = pageSeo?.metaTitle || itemSeo?.metaTitle || globalSeo?.metaTitle || meta.title
-  const description = pageSeo?.metaDescription || itemSeo?.metaDescription || globalSeo?.metaDescription || meta.description
+  const title = pageSeo?.metaTitle || itemSeo?.metaTitle || homeSeo?.metaTitle || meta.title
+  const description = pageSeo?.metaDescription || itemSeo?.metaDescription || homeSeo?.metaDescription || meta.description
   const articleCanonicalPath = pathname === '/articles' || pathname.startsWith('/articles/')
     ? pathname.replace(/^\/articles/, '/latest-thinking')
     : pathname
   const defaultCanonicalPath = pathname === '/global' && hasSeparateSiteOrigins() ? '/' : articleCanonicalPath
-  const canonical = pageSeo?.canonicalUrl || itemSeo?.canonicalUrl || globalSeo?.canonicalUrl || absoluteUrl(defaultCanonicalPath, mode)
+  const canonical = pageSeo?.canonicalUrl || itemSeo?.canonicalUrl || homeSeo?.canonicalUrl || absoluteUrl(defaultCanonicalPath, mode)
   const ogImage = pageSeo?.ogImage || itemSeo?.ogImage || globalSeo?.ogImage
   const twitterImage = pageSeo?.twitterImage || itemSeo?.twitterImage || globalSeo?.twitterImage
   const noIndex = pageSeo?.noIndex ?? itemSeo?.noIndex ?? globalSeo?.noIndex
-  return { title, description, robots: noIndex ? { index: false, follow: false } : undefined, alternates: { canonical }, openGraph: { title: pageSeo?.ogTitle || itemSeo?.ogTitle || globalSeo?.ogTitle || title, description: pageSeo?.ogDescription || itemSeo?.ogDescription || globalSeo?.ogDescription || description, url: canonical, type: 'website', images: ogImage?.src ? [{ url: ogImage.src, alt: ogImage.alt }] : undefined }, twitter: { card: twitterImage?.src ? 'summary_large_image' : 'summary', title: pageSeo?.ogTitle || itemSeo?.ogTitle || globalSeo?.ogTitle || title, description: pageSeo?.ogDescription || itemSeo?.ogDescription || globalSeo?.ogDescription || description, images: twitterImage?.src ? [twitterImage.src] : undefined } }
+  return { title, description, robots: noIndex ? { index: false, follow: false } : undefined, alternates: { canonical }, openGraph: { title: pageSeo?.ogTitle || itemSeo?.ogTitle || homeSeo?.ogTitle || title, description: pageSeo?.ogDescription || itemSeo?.ogDescription || homeSeo?.ogDescription || description, url: canonical, type: 'website', images: ogImage?.src ? [{ url: ogImage.src, alt: ogImage.alt }] : undefined }, twitter: { card: twitterImage?.src ? 'summary_large_image' : 'summary', title: pageSeo?.ogTitle || itemSeo?.ogTitle || homeSeo?.ogTitle || title, description: pageSeo?.ogDescription || itemSeo?.ogDescription || homeSeo?.ogDescription || description, images: twitterImage?.src ? [twitterImage.src] : undefined } }
 }
 
 export default async function CatchAllPage({ params }: { params: Promise<{ slug?: string[] }> }) {
@@ -78,7 +79,7 @@ export default async function CatchAllPage({ params }: { params: Promise<{ slug?
   const cmsPage = isBuiltInRoute(pathname) ? null : await getStrapiPage(pathname, mode)
   if (cmsPage) {
     const content = await getStrapiContent(mode)
-    return <CmsChromeProvider navigation={cmsPage.navigation || content.navigation} footer={cmsPage.footer || content.footer} content={content}><CmsPage page={cmsPage} /></CmsChromeProvider>
+    return <CmsChromeProvider navigation={cmsPage.navigation || content.navigation} footer={cmsPage.footer || content.footer} content={content}><CmsPage page={cmsPage} content={content} /></CmsChromeProvider>
   }
   const content = await getStrapiContent(mode)
   const withChrome = (page: ReactElement) => <CmsChromeProvider navigation={content.navigation} footer={content.footer} content={content}>{page}</CmsChromeProvider>

@@ -1,5 +1,6 @@
 import { createEmptyCmsContent, type CmsContent, type CmsFooter, type CmsFocusArea, type CmsJob, type CmsLeadership, type CmsMedia, type CmsNavigationItem, type CmsOffice, type CmsPage, type CmsSection, type CmsSEO, type CmsSettings } from '@/lib/cms-content'
 import type { Article, ArticleContentBlock, Industry, Service, SiteMode } from '@/lib/igas-data'
+import { sortArticles } from '@/lib/article-content'
 
 type ApiRecord = Record<string, unknown>
 
@@ -56,6 +57,13 @@ function mergeSettings(fallback: CmsSettings, record: ApiRecord): CmsSettings {
   }).sort((left, right) => left.sortOrder - right.sortOrder)
   return {
     ...settings,
+    contactConsentText: settings.contactConsentText || stringValue(item, 'contactConsent'),
+    contactSuccessMessage: settings.contactSuccessMessage || stringValue(item, 'contactSuccess'),
+    ...Object.fromEntries(['title', 'description', 'acceptLabel', 'rejectLabel', 'manageLabel', 'essentialLabel', 'analyticsLabel', 'marketingLabel'].flatMap(key => {
+      const field = `cookie${key[0].toUpperCase()}${key.slice(1)}` as keyof CmsSettings
+      const value = item.cookieConsent && typeof item.cookieConsent === 'object' ? stringValue(item.cookieConsent as ApiRecord, key) : ''
+      return !settings[field] && value ? [[field, value]] : []
+    })),
     heroImageUrl: mediaUrl(settings.heroImageUrl),
     aboutImageUrl: mediaUrl(settings.aboutImageUrl),
     careersImageUrl: mediaUrl(settings.careersImageUrl),
@@ -102,6 +110,8 @@ function contentBlocks(value: unknown): ArticleContentBlock[] | undefined {
     if (!block || typeof block !== 'object') return false
     const item = block as Record<string, unknown>
     return typeof item.type === 'string' && (!item.children || Array.isArray(item.children))
+  }).map(function normalizeBlock(block): ArticleContentBlock {
+    return { ...block, ...(block.image ? { image: { ...block.image, url: mediaUrl(block.image.url) } } : {}), children: block.children?.map(normalizeBlock) }
   })
 }
 
@@ -133,7 +143,8 @@ function seoValue(value: unknown): CmsSEO | undefined {
 function mediaComponent(value: unknown, fallbackUrl = '', fallbackAlt = '') {
   if (!value || typeof value !== 'object') return mediaValue(undefined, fallbackUrl, fallbackAlt)
   const item = attributes(value as ApiRecord)
-  return mediaValue(item.file, fallbackUrl, stringValue(item, 'alt', fallbackAlt))
+  const media = mediaValue(item.file, fallbackUrl, stringValue(item, 'alt', fallbackAlt))
+  return media ? { ...media, alt: stringValue(item, 'alt') || media.alt, caption: stringValue(item, 'caption') || media.caption } : undefined
 }
 
 function relationRecords(value: unknown): ApiRecord[] {
@@ -259,6 +270,14 @@ function normalizeFooter(record: ApiRecord, mode: SiteMode): CmsFooter {
     signature: stringValue(item, 'signature'),
     contactEmail: stringValue(item, 'contactEmail'),
     contactPhone: stringValue(item, 'contactPhone'),
+    columns: Array.isArray(item.columns) ? item.columns.filter((column): column is ApiRecord => Boolean(column && typeof column === 'object')).map(column => {
+      const value = attributes(column)
+      return { heading: stringValue(value, 'heading'), order: numberValue(value, 'order') || 0, links: normalizeLinkList(value.links) }
+    }).sort((a, b) => a.order - b.order) : [],
+    newsletterSuccess: stringValue(item, 'newsletterSuccess'),
+    emailLabel: stringValue(item, 'emailLabel'),
+    emailPlaceholder: stringValue(item, 'emailPlaceholder'),
+    subscribeLabel: stringValue(item, 'subscribeLabel'),
     newsletterTitle: stringValue(item, 'newsletterTitle'),
     newsletterDescription: stringValue(item, 'newsletterDescription'),
     copyright: stringValue(item, 'copyright'),
@@ -278,10 +297,11 @@ async function requestCollection(path: string, url: string, token: string) {
   return payload.data || []
 }
 
-async function requestCollectionSafely(path: string, url: string, token: string, label: string) {
+async function requestCollectionSafely(path: string, url: string, token: string, label: string, onError?: () => void) {
   try {
     return await requestCollection(path, url, token)
   } catch (error) {
+    onError?.()
     console.error(`Unable to load Strapi ${label}.`, error)
     return []
   }
@@ -290,7 +310,7 @@ async function requestCollectionSafely(path: string, url: string, token: string,
 function formatDate(value: string, fallback: string) {
   if (!value) return fallback
   const date = new Date(value)
-  return Number.isNaN(date.getTime()) ? value : date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+  return Number.isNaN(date.getTime()) ? value : date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' })
 }
 
 function modeFilter(mode: SiteMode) {
@@ -310,13 +330,13 @@ export async function getStrapiContent(mode: SiteMode = 'india'): Promise<CmsCon
     const [serviceRecords, industryRecords, articleRecords, settingRecords, jobRecords, officeRecords, leadershipRecords, navigationRecords, footerRecords, focusAreaRecords, pageRecords] = await Promise.all([
       requestCollectionSafely(`/api/services?${modeFilter(mode)}&sort=sortOrder:asc&populate=*&pagination[pageSize]=100`, url, token, 'services'),
       requestCollectionSafely(`/api/industries?${modeFilter(mode)}&sort=sortOrder:asc&populate=*&pagination[pageSize]=100`, url, token, 'industries'),
-      requestCollectionSafely(`/api/articles?${modeFilter(mode)}&sort=date:desc&populate=*&pagination[pageSize]=100`, url, token, 'articles'),
+      requestCollectionSafely(`/api/articles?${modeFilter(mode)}&sort[0]=sortOrder:asc&sort[1]=date:desc&sort[2]=slug:asc&populate=*&pagination[pageSize]=100`, url, token, 'articles'),
       requestCollectionSafely(`/api/site-settings?${modeFilter(mode)}&populate=*&pagination[pageSize]=1`, url, token, 'site settings'),
       requestCollectionSafely(`/api/jobs?${modeFilter(mode)}&sort=sortOrder:asc&populate=*&pagination[pageSize]=100`, url, token, 'jobs'),
       requestCollectionSafely(`/api/offices?${modeFilter(mode)}&sort=sortOrder:asc&populate=*&pagination[pageSize]=100`, url, token, 'offices'),
       requestCollectionSafely(`/api/leadership-profiles?${modeFilter(mode)}&sort=sortOrder:asc&populate=*&pagination[pageSize]=100`, url, token, 'leadership'),
       requestCollectionSafely(`/api/navigation-items?${modeFilter(mode)}&filters[visible][$eq]=true&sort=order:asc&pagination[pageSize]=100`, url, token, 'navigation'),
-      requestCollectionSafely(`/api/footers?${modeFilter(mode)}&populate=*&pagination[pageSize]=1`, url, token, 'footer'),
+      requestCollectionSafely(`/api/footers?${modeFilter(mode)}&populate=*&populate[columns][populate][links]=*&pagination[pageSize]=1`, url, token, 'footer'),
       requestCollectionSafely(`/api/focus-areas?${modeFilter(mode)}&sort=sortOrder:asc&populate[industries][fields][0]=title&populate[industries][fields][1]=slug&pagination[pageSize]=100`, url, token, 'focus areas'),
       requestCollectionSafely(`/api/pages?${modeFilter(mode)}&fields[0]=path&fields[1]=title&fields[2]=description&pagination[pageSize]=100`, url, token, 'pages'),
     ])
@@ -391,6 +411,8 @@ export async function getStrapiContent(mode: SiteMode = 'india'): Promise<CmsCon
         excerpt: stringValue(item, 'excerpt'),
         category: stringValue(item, 'category'),
         date: formatDate(stringValue(item, 'publicationDate', stringValue(item, 'date')), ''),
+        publicationDate: stringValue(item, 'publicationDate') || stringValue(item, 'date'),
+        sortOrder: numberValue(item, 'sortOrder') ?? 0,
         slug: stringValue(item, 'slug'),
         image,
         content: contentBlocks(item.content),
@@ -416,7 +438,7 @@ export async function getStrapiContent(mode: SiteMode = 'india'): Promise<CmsCon
       services,
       industries,
       focusAreas,
-      articles,
+      articles: sortArticles(articles),
       jobs: jobRecords.map((record) => normalizeJob(record, mode)).filter((job) => job.applicationStatus === 'open'),
       offices: officeRecords.map((record) => normalizeOffice(record, mode)),
       leadership: leadershipRecords.map((record) => normalizeLeadership(record, mode)),
@@ -444,7 +466,7 @@ export async function getStrapiPage(pathname: string, mode: SiteMode = 'india'):
     if (!records.length) return null
     const [navigationRecords, footerRecords] = await Promise.all([
       requestCollectionSafely(`/api/navigation-items?${modeFilter(mode)}&filters[visible][$eq]=true&sort=order:asc&pagination[pageSize]=100`, url, token, `${mode} navigation`),
-      requestCollectionSafely(`/api/footers?${modeFilter(mode)}&populate=*&pagination[pageSize]=1`, url, token, `${mode} footer`),
+      requestCollectionSafely(`/api/footers?${modeFilter(mode)}&populate=*&populate[columns][populate][links]=*&pagination[pageSize]=1`, url, token, `${mode} footer`),
     ])
     const item = attributes(records[0])
     const rawSections = Array.isArray(item.sections) ? item.sections : []
@@ -471,4 +493,45 @@ export async function getStrapiPagePaths(mode: SiteMode = 'india'): Promise<Arra
   if (!url || !token) return []
   const records = await requestCollectionSafely(`/api/pages?${modeFilter(mode)}&fields[0]=path&pagination[pageSize]=100`, url, token, `${mode} page paths`)
   return records.map((record) => { const item = attributes(record); return { path: stringValue(item, 'path'), lastModified: stringValue(item, 'updatedAt') || undefined } }).filter((item) => Boolean(item.path))
+}
+
+export type SiteSearchResult = { title: string; description: string; href: string; type: 'Service' | 'Industry' | 'Article' | 'Page' | 'Job' }
+
+export async function searchSiteContent(query: string, mode: SiteMode = 'india'): Promise<SiteSearchResult[]> {
+  const term = query.trim()
+  const url = process.env.STRAPI_URL?.replace(/\/$/, '')
+  const token = process.env.STRAPI_API_TOKEN
+  if (!term || term.length < 2 || !url || !token) return []
+  const filter = encodeURIComponent(term)
+  const base = `${modeFilter(mode)}&pagination[pageSize]=20`
+  const collections = [
+    { endpoint: 'services', type: 'Service' as const, prefix: '/services', field: 'title' },
+    { endpoint: 'industries', type: 'Industry' as const, prefix: '/industries', field: 'title' },
+    { endpoint: 'articles', type: 'Article' as const, prefix: '/latest-thinking', field: 'title' },
+    { endpoint: 'jobs', type: 'Job' as const, prefix: '/careers', field: 'title', openOnly: true },
+  ]
+  let failures = 0
+  const results = await Promise.all(collections.map(async ({ endpoint, type, prefix, field, openOnly }) => {
+    const status = openOnly ? '&filters[applicationStatus][$eq]=open' : ''
+    const records = await requestCollectionSafely(`/api/${endpoint}?${base}${status}&filters[${field}][$containsi]=${filter}&populate=*&sort=sortOrder:asc`, url, token, `search ${endpoint}`, () => { failures += 1 })
+    return records.flatMap((record): SiteSearchResult[] => {
+      const item = attributes(record)
+      const slug = stringValue(item, 'slug')
+      const title = stringValue(item, 'title')
+      if (!slug || !title) return []
+      return [{ title, description: stringValue(item, 'excerpt', stringValue(item, 'shortDescription', stringValue(item, 'description'))), href: `${prefix}/${slug}`, type }]
+    })
+  }))
+  const pages = await requestCollectionSafely(`/api/pages?filters[mode][$eq]=${mode}&filters[$or][0][title][$containsi]=${filter}&filters[$or][1][description][$containsi]=${filter}&pagination[pageSize]=20`, url, token, 'search pages', () => { failures += 1 })
+  if (failures === collections.length + 1) throw new Error('All Strapi search requests failed.')
+  const pageResults = pages.flatMap((record): SiteSearchResult[] => {
+    const item = attributes(record)
+    const path = stringValue(item, 'path')
+    const title = stringValue(item, 'title')
+    if (!path || !title) return []
+    return [{ title, description: stringValue(item, 'description'), href: path, type: 'Page' }]
+  })
+  const all = [...results.flat(), ...pageResults]
+  const seen = new Set<string>()
+  return all.filter((item) => !seen.has(item.href) && Boolean(seen.add(item.href)))
 }

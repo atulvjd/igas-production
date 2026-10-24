@@ -30,6 +30,8 @@
       "type": "string"
     },
     "heroImage": { "type": "component", "repeatable": false, "component": "shared.media" },
+    "imageUrl": { "type": "string" },
+    "imageAlt": { "type": "string" },
     "relatedIndustries": { "type": "relation", "relation": "manyToMany", "target": "api::industry.industry" },
     "relatedArticles": { "type": "relation", "relation": "manyToMany", "target": "api::article.article" },
     "relatedLeadership": { "type": "relation", "relation": "manyToMany", "target": "api::leadership-profile.leadership-profile" },

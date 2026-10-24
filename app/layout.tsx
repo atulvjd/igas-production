@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { ConsentAwareAnalytics } from '@/components/consent-aware-analytics'
+import { SiteInteractions } from '@/components/site-interactions'
 import { absoluteUrl, getSiteUrl, isIndexingEnabled, siteDescription, siteName } from '@/lib/site-url'
 import './globals.css'
 
@@ -44,7 +45,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="bg-background">
       <body className="antialiased font-sans">
+        <a className="skip-link" href="#main-content">Skip to content</a>
         {children}
+        <SiteInteractions />
         <ConsentAwareAnalytics />
       </body>
     </html>

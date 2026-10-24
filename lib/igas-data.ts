@@ -34,9 +34,17 @@ export interface Media {
 
 export interface ArticleContentBlock {
   type: string
+  text?: string
   level?: number
   format?: string
-  children?: Array<{ type?: string; text?: string }>
+  url?: string
+  bold?: boolean
+  italic?: boolean
+  underline?: boolean
+  strikethrough?: boolean
+  code?: boolean
+  image?: { url: string; alternativeText?: string; caption?: string; width?: number; height?: number }
+  children?: ArticleContentBlock[]
 }
 
 export interface Article {
@@ -44,6 +52,8 @@ export interface Article {
   excerpt: string
   category: string
   date: string
+  publicationDate?: string
+  sortOrder?: number
   slug: string
   image?: string | Media
   content?: ArticleContentBlock[]
