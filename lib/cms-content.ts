@@ -7,7 +7,7 @@ export type CmsSEO = { metaTitle?: string; metaDescription?: string; canonicalUr
 export type CmsJob = Job & { shortDescription: string; description?: Article['content']; responsibilities?: Article['content']; qualifications?: Article['content']; requirements?: Article['content']; benefits?: Article['content']; department?: string; employmentType: string; officeSlug?: string; applicationCTA?: string; applicationUrl?: string; applicationStatus: 'open' | 'paused' | 'closed'; deadline?: string; mode: SiteMode; updatedAt?: string; seo?: CmsSEO }
 export type CmsOffice = Office & { name: string; slug: string; address?: string; phone?: string; email?: string; description?: Article['content']; media?: CmsMedia; latitude?: number; longitude?: number; services: CmsRelatedItem[]; mode: SiteMode; updatedAt?: string; seo?: CmsSEO }
 export type CmsLeadership = { name: string; slug: string; position: string; biography?: Article['content']; media?: CmsMedia; email?: string; linkedInUrl?: string; relatedServices: CmsRelatedItem[]; relatedIndustries: CmsRelatedItem[]; mode: SiteMode; updatedAt?: string; seo?: CmsSEO }
-export type CmsFocusArea = { title: string; slug: string; description: string; industries: Array<Pick<Industry, 'title' | 'slug'>>; mode: SiteMode; sortOrder: number }
+export type CmsFocusArea = { media?: CmsMedia; title: string; slug: string; description: string; industries: Array<Pick<Industry, 'title' | 'slug'>>; mode: SiteMode; sortOrder: number }
 export type CmsMegaMenu = { section: 'what-we-do' | 'where-we-focus' | 'who-we-are' | 'latest-thinking' | 'careers'; label: string; title: string; description: string; ctaLabel: string; ctaHref: string; sortOrder: number }
 export type CmsNavigationItem = { label: string; href: string; group: string; parentGroup?: string; description?: string; menuType: 'header' | 'mobile' | 'footer'; external: boolean; cta: boolean; visible: boolean; mode: SiteMode; order: number }
 export type CmsFooter = { columns?: Array<{ heading: string; order: number; links: Array<{ label: string; href: string; external: boolean; order: number }> }>; newsletterSuccess?: string; emailLabel?: string; emailPlaceholder?: string; subscribeLabel?: string; mode: SiteMode; quote?: string; quoteAuthor?: string; signature?: string; contactEmail?: string; contactPhone?: string; newsletterTitle?: string; newsletterDescription?: string; copyright?: string; usefulLinks: Array<{ label: string; href: string; external: boolean; order: number }>; legalLinks: Array<{ label: string; href: string; external: boolean; order: number }>; socialLinks: Array<{ label: string; href: string; order: number }> }
@@ -19,6 +19,16 @@ export type CmsSettings = {
   contactCtaHref: string
   searchLabel: string
   searchPlaceholder: string
+  contactImageUrl?: string
+  contactImageAlt?: string
+  aboutPageImageUrl?: string
+  aboutPageImageAlt?: string
+  careersPageImageUrl?: string
+  careersPageImageAlt?: string
+  presenceImageUrl?: string
+  presenceImageAlt?: string
+  leadershipImageUrl?: string
+  leadershipImageAlt?: string
   heroEyebrow: string
   heroTitle: string
   heroIntro: string
@@ -83,6 +93,7 @@ export function createEmptyCmsContent(mode: SiteMode = 'india'): CmsContent {
     settings: {
       mode,
       logo: undefined, globalLogo: undefined, contactCtaLabel: '', contactCtaHref: '', searchLabel: '', searchPlaceholder: '',
+      contactImageUrl: '', contactImageAlt: '', aboutPageImageUrl: '', aboutPageImageAlt: '', careersPageImageUrl: '', careersPageImageAlt: '', presenceImageUrl: '', presenceImageAlt: '', leadershipImageUrl: '', leadershipImageAlt: '',
       heroEyebrow: '', heroTitle: '', heroIntro: '', heroCta: '', heroCtaHref: '/contact', heroImageUrl: '', heroImage: undefined,
       statementTitle: '', statementIntro: '', statementCtaLabel: '', statementCtaHref: '/about', aboutTitle: '', aboutText: '', aboutCtaLabel: '', aboutCtaHref: '/about', aboutImageUrl: '',
       presenceTitle: '', presenceText: '', careersTitle: '', careersText: '', careersImageUrl: '',

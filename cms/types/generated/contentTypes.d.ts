@@ -524,6 +524,8 @@ export interface ApiFocusAreaFocusArea extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     description: Schema.Attribute.Text;
+    imageAlt: Schema.Attribute.String;
+    imageUrl: Schema.Attribute.String;
     industries: Schema.Attribute.Relation<
       'manyToMany',
       'api::industry.industry'
@@ -706,6 +708,8 @@ export interface ApiLeadershipProfileLeadershipProfile
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     email: Schema.Attribute.Email;
+    imageAlt: Schema.Attribute.String;
+    imageUrl: Schema.Attribute.String;
     linkedInUrl: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
@@ -934,10 +938,14 @@ export interface ApiSiteSettingSiteSetting extends Struct.CollectionTypeSchema {
     aboutCtaLabel: Schema.Attribute.String;
     aboutImage: Schema.Attribute.Component<'shared.media', false>;
     aboutImageUrl: Schema.Attribute.String;
+    aboutPageImageAlt: Schema.Attribute.String;
+    aboutPageImageUrl: Schema.Attribute.String;
     aboutText: Schema.Attribute.Text;
     aboutTitle: Schema.Attribute.String;
     careersImage: Schema.Attribute.Component<'shared.media', false>;
     careersImageUrl: Schema.Attribute.String;
+    careersPageImageAlt: Schema.Attribute.String;
+    careersPageImageUrl: Schema.Attribute.String;
     careersText: Schema.Attribute.Text;
     careersTitle: Schema.Attribute.String;
     contactConsent: Schema.Attribute.String;
@@ -946,6 +954,8 @@ export interface ApiSiteSettingSiteSetting extends Struct.CollectionTypeSchema {
     contactCtaLabel: Schema.Attribute.String;
     contactEmail: Schema.Attribute.Email;
     contactEyebrow: Schema.Attribute.String;
+    contactImageAlt: Schema.Attribute.String;
+    contactImageUrl: Schema.Attribute.String;
     contactIntro: Schema.Attribute.Text;
     contactPhone: Schema.Attribute.String;
     contactPrivacyNote: Schema.Attribute.Text;
@@ -973,6 +983,8 @@ export interface ApiSiteSettingSiteSetting extends Struct.CollectionTypeSchema {
     heroImageUrl: Schema.Attribute.String;
     heroIntro: Schema.Attribute.Text;
     heroTitle: Schema.Attribute.String;
+    leadershipImageAlt: Schema.Attribute.String;
+    leadershipImageUrl: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -985,6 +997,8 @@ export interface ApiSiteSettingSiteSetting extends Struct.CollectionTypeSchema {
       Schema.Attribute.Required &
       Schema.Attribute.Unique;
     newsletterTitle: Schema.Attribute.String;
+    presenceImageAlt: Schema.Attribute.String;
+    presenceImageUrl: Schema.Attribute.String;
     presenceText: Schema.Attribute.Text;
     presenceTitle: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;

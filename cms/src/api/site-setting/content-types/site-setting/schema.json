@@ -196,6 +196,36 @@
       "type": "component",
       "repeatable": true,
       "component": "shared.stat-item"
+    },
+    "contactImageUrl": {
+      "type": "string"
+    },
+    "contactImageAlt": {
+      "type": "string"
+    },
+    "aboutPageImageUrl": {
+      "type": "string"
+    },
+    "aboutPageImageAlt": {
+      "type": "string"
+    },
+    "careersPageImageUrl": {
+      "type": "string"
+    },
+    "careersPageImageAlt": {
+      "type": "string"
+    },
+    "presenceImageUrl": {
+      "type": "string"
+    },
+    "presenceImageAlt": {
+      "type": "string"
+    },
+    "leadershipImageUrl": {
+      "type": "string"
+    },
+    "leadershipImageAlt": {
+      "type": "string"
     }
   }
 }

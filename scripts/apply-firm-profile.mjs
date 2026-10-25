@@ -67,7 +67,7 @@ for (const settings of snapshot['site-settings'].published) {
     careersText: 'IGAS’s mission is to create an environment for personal growth, healthy competition, contentment and integrity. We value mentoring, collaborative thinking and a diverse, inclusive workplace where people can develop their skills and contribute ideas.',
     contactTitle: 'Let’s understand your business challenge.',
     contactIntro: 'Connect with our Mumbai corporate office or Bengaluru branch to discuss audit, tax, consulting, deals, forensic or strategy support. Tell us about your organisation and the outcome you are working towards.',
-    contactEmail: 'Mohan@caigas.in', footerSignature: 'Pride in service. Confidence in delivery.',
+    contactEmail: 'example@example.10.com', footerSignature: 'Pride in service. Confidence in delivery.',
     megaMenus: settings.megaMenus.map(menu => menuCopy[menu.section] ? { ...menu, title: menuCopy[menu.section][0], description: menuCopy[menu.section][1] } : menu),
     seo: seo('IGAS | Audit, Tax & Business Consulting', 'Homegrown Indian accounting and consulting firm. Explore IGAS audit, tax, consulting, deals, forensic and strategy services.'),
   })
@@ -104,12 +104,12 @@ const offices = [
 ]
 for (const [sortOrder, [name, slug, city, address]] of offices.entries()) {
   const existing = snapshot.offices.draft.find(item => item.slug === slug) || (sortOrder === 0 ? snapshot.offices.draft.find(item => item.slug.startsWith('demo-')) : undefined)
-  await save('offices', existing, { name, slug, city, country: 'India', address, email: 'Mohan@caigas.in', description: [paragraph(`${name}, as listed in the IGAS firm profile. Contact the team to discuss your business and professional service requirements.`)], mode: 'india', sortOrder, imageUrl: null, imageAlt: null, seo: seo(`${name} | IGAS`, `Contact IGAS in ${city} for audit, tax, consulting and business service enquiries.`) })
+  await save('offices', existing, { name, slug, city, country: 'India', address, email: 'example@example.10.com', description: [paragraph(`${name}, as listed in the IGAS firm profile. Contact the team to discuss your business and professional service requirements.`)], mode: 'india', sortOrder, imageUrl: null, imageAlt: null, seo: seo(`${name} | IGAS`, `Contact IGAS in ${city} for audit, tax, consulting and business service enquiries.`) })
 }
-for (const footer of snapshot.footers.published) await save('footers', footer, { quote: 'Pride in Service. Confidence in Delivery.', quoteAuthor: 'IGAS', signature: 'A homegrown Indian accounting and consulting firm, driven by a purpose to serve society with attention and care.', contactEmail: 'Mohan@caigas.in' })
+for (const footer of snapshot.footers.published) await save('footers', footer, { quote: 'Pride in Service. Confidence in Delivery.', quoteAuthor: 'IGAS', signature: 'A homegrown Indian accounting and consulting firm, driven by a purpose to serve society with attention and care.', contactEmail: 'example@example.10.com' })
 for (const page of snapshot.pages.published) {
   const sections = clean(page.sections).map(({ __component, ...fields }) => ({ __component, ...Object.fromEntries(Object.entries(fields).filter(([key, value]) => value !== null || !['image'].includes(key))) }))
-  for (const section of sections) if (section.__component === 'shared.contact-form') section.contactEmail = 'Mohan@caigas.in'
+  for (const section of sections) if (section.__component === 'shared.contact-form') section.contactEmail = 'example@example.10.com'
   if (page.path === '/our-approach') {
     const rich = sections.find(section => section.__component === 'shared.rich-text')
     rich.title = 'Understand the challenge. Partner on the solution.'

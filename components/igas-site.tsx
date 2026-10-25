@@ -8,8 +8,12 @@ import { createEmptyCmsContent, type CmsContent, type CmsFooter, type CmsMedia, 
 import { BreadcrumbSchema, OrganizationSchema } from '@/components/seo-structured-data'
 import { RichText } from '@/components/rich-text'
 import { ArticleListing } from '@/components/article-listing'
+import { SocialIcon } from '@/components/social-icon'
+import { OfficeDirectory } from '@/components/office-directory'
+import { ArticleReadingTools } from '@/components/article-reading-tools'
 import { articleHeadings, readingMinutes } from '@/lib/article-content'
 import { useDialogFocus } from '@/components/use-dialog-focus'
+import { CONSENT_EVENT, CONSENT_STORAGE_KEY, CONSENT_OPEN_EVENT, readConsent, saveConsent, refreshConsentFromStorage } from '@/lib/cookie-consent'
 
 const cx = (...classes: Array<string | false | null | undefined>) => classes.filter(Boolean).join(' ')
 const mediaUrl = (media?: string | { url: string }) => typeof media === 'string' ? media : media?.url || ''
@@ -231,11 +235,13 @@ function SectionLabel({ index, children }: { index: string; children: React.Reac
 function EmptyState({ label }: { label: string }) { return <div className="empty-state-panel"><p className="eyebrow">Nothing here yet</p><p>{label}</p></div> }
 function ArrowLink({ href, children, light = false }: { href: string; children: React.ReactNode; light?: boolean }) { return <Link className={cx('arrow-link', light && 'arrow-link-light')} href={href}>{children}<ArrowUpRight size={17} /></Link> }
 
-function Hero({ settings }: { settings: CmsContent['settings'] }) {
+function Hero({ content }: { content: CmsContent }) {
+  const { settings } = content
+  const highlightedServices = ['audit-assurance', 'tax-regulatory', 'advisory-consulting'].flatMap(slug => content.services.filter(service => service.slug === slug))
   const image = settings.heroImage?.src || settings.heroImageUrl
   if (!settings.heroTitle && !settings.heroIntro && !settings.heroCta && !image) return null
   return <section className={cx('hero', !image && 'hero-without-image')}>
-    <div className="hero-content"><p className="eyebrow">{settings.heroEyebrow}</p><h1>{settings.heroTitle}</h1><p className="hero-intro">{settings.heroIntro}</p><div className="hero-actions">{settings.heroCta && <ContentLink href={settings.heroCtaHref || '/contact'} className="button button-dark">{settings.heroCta}<ArrowUpRight size={17} /></ContentLink>}{settings.aboutCtaLabel && <ArrowLink href={settings.aboutCtaHref || '/about'}>{settings.aboutCtaLabel}</ArrowLink>}</div></div>
+    <div className="hero-content"><p className="eyebrow">{settings.heroEyebrow}</p><h1>{settings.heroTitle}</h1><p className="hero-intro">{settings.heroIntro}</p><div className="hero-actions">{settings.heroCta && <ContentLink href={settings.heroCtaHref || '/contact'} className="button button-dark">{settings.heroCta}<ArrowUpRight size={17} /></ContentLink>}{settings.aboutCtaLabel && <ArrowLink href={settings.aboutCtaHref || '/about'}>{settings.aboutCtaLabel}</ArrowLink>}</div>{highlightedServices.length > 0 && <nav className="hero-expertise" aria-label="Explore our expertise">{highlightedServices.map(service => <Link href={`/services/${service.slug}`} key={service.slug}>{service.title}<ArrowUpRight size={13} aria-hidden="true" /></Link>)}</nav>}</div>
     {image && <div className="hero-visual"><img className="hero-photo" src={image} alt={settings.heroImage?.alt || 'Business collaboration and planning'} fetchPriority="high" /><div className="hero-image-caption"><span className="hero-caption-mark" aria-hidden="true"><span /><span /><span /><span /></span><p>{settings.footerSignature}</p></div></div>}
   </section>
 }
@@ -253,7 +259,7 @@ function ServicesSection({ content }: { content: CmsContent }) {
 function IndustriesSection({ content }: { content: CmsContent }) {
   const menu = content.settings.megaMenus.find(item => item.section === 'where-we-focus')!
   if (!content.industries.length) return null
-  return <section className="container industries-section"><SectionLabel index="03">{menu.label}</SectionLabel><div className="section-heading">{menu.title && <h2>{menu.title}</h2>}<div>{menu.description && <p className="lead">{menu.description}</p>}{menu.ctaLabel && <ArrowLink href={menu.ctaHref}>{menu.ctaLabel}</ArrowLink>}</div></div><div className="industry-card-grid">{content.industries.map((industry, index) => <Link href={`/industries/${industry.slug}`} className="sector-card" key={industry.slug}><div className="sector-image">{industry.media?.src && <img src={industry.media.src} alt={industry.media.alt || industry.title} loading="lazy" />}<span>{String(index + 1).padStart(2, '0')}</span></div><div className="sector-copy"><h3>{industry.title}</h3><ArrowUpRight size={19} aria-hidden="true" /></div></Link>)}</div></section>
+  return <section className="container industries-section"><SectionLabel index="03">{menu.label}</SectionLabel><div className="section-heading">{menu.title && <h2>{menu.title}</h2>}<div>{menu.description && <p className="lead">{menu.description}</p>}<ArrowLink href={menu.ctaHref || '/industries'}>Explore all {content.industries.length} industries</ArrowLink></div></div><div className="industry-card-grid">{content.industries.slice(0, 6).map((industry, index) => <Link href={`/industries/${industry.slug}`} className="sector-card" key={industry.slug}><div className="sector-image">{industry.media?.src && <img src={industry.media.src} alt={industry.media.alt || industry.title} loading="lazy" />}<span>{String(index + 1).padStart(2, '0')}</span></div><div className="sector-copy"><h3>{industry.title}</h3><ArrowUpRight size={19} aria-hidden="true" /></div></Link>)}</div></section>
 }
 
 
@@ -286,7 +292,7 @@ function InsightsCarousel({ content }: { content: CmsContent }) {
 
   useEffect(() => {
     if (!playing) return
-    const timer = window.setTimeout(() => setActive((index) => (index + 1) % total), 5000)
+    const timer = window.setTimeout(() => setActive((index) => (index + 1) % total), 2000)
     return () => window.clearTimeout(timer)
   }, [playing, active, total])
 
@@ -323,7 +329,7 @@ function InsightsCarousel({ content }: { content: CmsContent }) {
 function CareersSection({ content }: { content: CmsContent }) { const menu = content.settings.megaMenus.find((item) => item.section === 'careers')!; const image = content.settings.careersImage?.src || content.settings.careersImageUrl; if (!content.settings.careersTitle && !content.settings.careersText && !menu.title && !menu.description && !image) return null; return <section className="careers-section container"><div className="careers-copy"><SectionLabel index="06">{menu.label}</SectionLabel>{(content.settings.careersTitle || menu.title) && <h2>{content.settings.careersTitle || menu.title}</h2>}{(content.settings.careersText || menu.description) && <p className="lead">{content.settings.careersText || menu.description}</p>}{menu.ctaLabel && <ArrowLink href={menu.ctaHref || '/careers'}>{menu.ctaLabel}</ArrowLink>}</div><div className="careers-image" style={image ? { backgroundImage: `url('${image}')` } : undefined} /></section> }
 
 function AboutStorySection({ settings }: { settings: CmsContent['settings'] }) { const image = settings.aboutImage?.src || settings.aboutImageUrl; if (!settings.aboutTitle && !settings.aboutText && !settings.aboutCtaLabel && !image) return null; return <section className="about-story container"><div className="story-copy"><SectionLabel index="01A">Our story</SectionLabel>{settings.aboutTitle && <h2>{settings.aboutTitle}</h2>}{settings.aboutText && <p className="lead">{settings.aboutText}</p>}{settings.aboutCtaLabel && <ArrowLink href={settings.aboutCtaHref || '/about'}>{settings.aboutCtaLabel}</ArrowLink>}</div><div className="story-image" style={image ? { backgroundImage: `linear-gradient(90deg, #172F5D22, transparent), url('${image}')` } : undefined} /></section> }
-function LeadershipPresenceSection({ content }: { content: CmsContent }) { const menu = content.settings.megaMenus.find((item) => item.section === 'who-we-are')!; const leaders = content.leadership.slice(0, 3); const offices = content.offices.slice(0, 3); const leadershipLink = content.navigation.find((item) => item.href === '/leadership'); const officeLink = content.navigation.find((item) => item.href === '/offices'); if (!leaders.length && !offices.length && !menu.title && !menu.description) return null; return <section className="leadership-presence dark-section"><div className="container presence-feature"><div className="presence-lead"><SectionLabel index="04">{menu.label}</SectionLabel>{menu.title && <h2>{menu.title}</h2>}{menu.description && <p className="lead">{menu.description}</p>}</div><div className="presence-panels">{leaders.length > 0 && <article className="presence-panel presence-panel-lead"><div className="leaders-image" style={leaders[0]?.media?.src ? { backgroundImage: `url('${leaders[0].media.src}')` } : undefined} /><div className="presence-panel-copy"><SectionLabel index="04A">{leadershipLink?.group || ''}</SectionLabel><h3>{leaders.map((leader) => leader.name).join(' · ')}</h3><p>{leaders[0]?.position || ''}</p>{leadershipLink && <ArrowLink href={leadershipLink.href} light>{leadershipLink.label}</ArrowLink>}</div></article>}{offices.length > 0 && <article className="presence-panel presence-panel-world">{offices[0]?.media?.src ? <div className="presence-office-photo"><img src={offices[0].media.src} alt={offices[0].media.alt || 'Illustrative business setting'} loading="lazy" /></div> : <div className="world-map" aria-label="" />}<div className="presence-panel-copy"><SectionLabel index="04B">{officeLink?.group || ''}</SectionLabel><h3>{offices.map((office) => office.city).join(' · ')}</h3><p>{offices[0]?.address || offices[0]?.detail || ''}</p>{officeLink && <ArrowLink href={officeLink.href} light>{officeLink.label}</ArrowLink>}</div></article>}</div></div></section> }
+function LeadershipPresenceSection({ content }: { content: CmsContent }) { const menu = content.settings.megaMenus.find((item) => item.section === 'who-we-are')!; const leaders = content.leadership.slice(0, 3); const leadershipImage = content.settings.leadershipImageUrl || leaders[0]?.media?.src; const presenceImage = content.settings.presenceImageUrl || content.offices[0]?.media?.src; const offices = content.offices.slice(0, 3); const leadershipLink = content.navigation.find((item) => item.href === '/leadership'); const officeLink = content.navigation.find((item) => item.href === '/offices'); if (!leaders.length && !offices.length && !menu.title && !menu.description) return null; return <section className="leadership-presence dark-section"><div className="container presence-feature"><div className="presence-lead"><SectionLabel index="04">{menu.label}</SectionLabel>{menu.title && <h2>{menu.title}</h2>}{menu.description && <p className="lead">{menu.description}</p>}</div><div className="presence-panels">{leaders.length > 0 && <article className="presence-panel presence-panel-lead"><div className="leaders-image" role="img" aria-label={content.settings.leadershipImageAlt || 'Illustrative professional collaboration'} style={leadershipImage ? { backgroundImage: `url('${leadershipImage}')` } : undefined} /><div className="presence-panel-copy"><SectionLabel index="04A">{leadershipLink?.group || ''}</SectionLabel><h3>{leaders.map((leader) => leader.name).join(' · ')}</h3><p>{leaders[0]?.position || ''}</p>{leadershipLink && <ArrowLink href={leadershipLink.href} light>{leadershipLink.label}</ArrowLink>}</div></article>}{offices.length > 0 && <article className="presence-panel presence-panel-world">{presenceImage ? <div className="presence-office-photo"><img src={presenceImage} alt={content.settings.presenceImageAlt || offices[0]?.media?.alt || 'Illustrative business setting'} loading="lazy" /></div> : <div className="world-map" aria-label="" />}<div className="presence-panel-copy"><SectionLabel index="04B">{officeLink?.group || ''}</SectionLabel><h3>{offices.map((office) => office.city).join(' · ')}</h3><p>{offices[0]?.address || offices[0]?.detail || ''}</p>{officeLink && <ArrowLink href={officeLink.href} light>{officeLink.label}</ArrowLink>}</div></article>}</div></div></section> }
 
 
 
@@ -381,13 +387,15 @@ export function Footer({ mode, footer }: { mode: SiteMode; footer?: CmsFooter })
   const newsletterTitle = resolvedFooter?.newsletterTitle || chrome.content?.settings.newsletterTitle
   const services = chrome.content?.services || []
   const offices = chrome.content?.offices || []
+  const industries = chrome.content?.industries || []
   const phone = resolvedFooter?.contactPhone || chrome.content?.settings.contactPhone
   const linkedHrefs = new Set(footerGroups.flatMap(group => group.links.map(link => link.href)))
   for (const [label, items, prefix] of [
     ['Our services', services, '/services/'],
+    ['Our focus', industries, '/industries/'],
   ] as const) {
     const links = items.filter(item => !linkedHrefs.has(`${prefix}${item.slug}`)).slice(0, 4).map(item => ({ title: item.title, href: `${prefix}${item.slug}`, external: false }))
-    links.push({ title: 'All services', href: '/services', external: false })
+    links.push({ title: prefix === '/services/' ? 'All services' : 'All industries', href: prefix === '/services/' ? '/services' : '/industries', external: false })
     if (links.length) footerGroups.push({ label, links })
   }
   return <footer className="footer">
@@ -398,53 +406,57 @@ export function Footer({ mode, footer }: { mode: SiteMode; footer?: CmsFooter })
           {signature && <p className="footer-firm-description">{signature}</p>}
           <div className="footer-contact"><h2>Get in touch</h2>{contact && <a href={`mailto:${contact}`}>{contact}</a>}{phone && <a href={`tel:${phone}`}>{phone}</a>}<Link href="/contact">Send an enquiry <ArrowUpRight size={14} /></Link>{offices.length > 0 && <div className="footer-city-links">{offices.map(office => <Link href={`/offices/${office.slug}`} key={office.slug}>{office.city}</Link>)}</div>}</div>
         </div>
-        <nav className="footer-links" aria-label="Footer navigation">{footerGroups.map((group) => <div key={group.label}><h2>{group.label}</h2>{(group.label === 'Legal' ? group.links : group.links.slice(0, 5)).map((link) => <Link href={link.href} key={`${group.label}-${link.href}`} target={link.external ? '_blank' : undefined} rel={link.external ? 'noreferrer' : undefined}>{link.title}</Link>)}</div>)}</nav>
+        <nav className="footer-links" aria-label="Footer navigation">{footerGroups.map((group) => <div key={group.label}><h2>{group.label}</h2>{(group.label === 'Legal' ? group.links : group.links.slice(0, 5)).map((link) => <Link href={link.href} key={`${group.label}-${link.href}`} target={link.external ? '_blank' : undefined} rel={link.external ? 'noreferrer' : undefined}>{link.title}</Link>)}</div>)}{socialLinks.length > 0 && <div className="footer-connect-column">{socialLinks.length > 0 && <div className="footer-social-links"><h2>Follow IGAS</h2><div className="footer-social-icons">{socialLinks.map(link => <a href={link.href} key={link.href} target="_blank" rel="noreferrer" aria-label={`${link.label} (opens in a new tab)`} title={link.label}><SocialIcon href={link.href} label={link.label} /></a>)}</div></div>}</div>}</nav>
       </div>
+      {offices.length > 0 && <div className="footer-office-summary" aria-label="Our offices">{offices.map(office => <div className="footer-office-summary-item" key={office.slug}><MapPin size={18} aria-hidden="true" /><div><Link href={`/offices/${office.slug}`}>{office.name || office.city}<ArrowUpRight size={13} aria-hidden="true" /></Link>{office.address && <address>{office.address}</address>}</div></div>)}</div>}
       <Newsletter footer={resolvedFooter} title={newsletterTitle} />
-      <div className="footer-bottom"><span>{resolvedFooter?.copyright || `© ${new Date().getFullYear()} IGAS`}</span>{socialLinks.length > 0 && <div className="footer-social-links">{socialLinks.map((link) => <a href={link.href} key={link.href} target="_blank" rel="noreferrer">{link.label}</a>)}</div>}{legalLinks.length > 0 && <div className="footer-legal-links">{legalLinks.map((link) => <Link href={link.href} key={link.href} target={link.external ? '_blank' : undefined} rel={link.external ? 'noreferrer' : undefined}>{link.label}</Link>)}</div>}<a href="#main-content">Back to top ↑</a></div>
+      <div className="footer-bottom"><div className="footer-bottom-details"><span>{resolvedFooter?.copyright || `© ${new Date().getFullYear()} IGAS. All rights reserved.`}</span>{legalLinks.length > 0 && <nav className="footer-legal-links" aria-label="Policies and terms">{legalLinks.map(link => <Link href={link.href} key={link.href} target={link.external ? '_blank' : undefined} rel={link.external ? 'noreferrer' : undefined}>{link.label}</Link>)}</nav>}</div><div className="footer-cookie-controls"><button type="button" className="footer-cookie-preferences" onClick={() => window.dispatchEvent(new Event(CONSENT_OPEN_EVENT))}>Cookie preferences</button><a href="#main-content">Back to top ↑</a></div></div>
     </div>
   </footer>
 }
 
-const CONSENT_COOKIE = 'igas-consent'
-const CONSENT_EVENT = 'igas-consent-change'
-
-function hasAnalyticsConsent() {
-  return typeof document !== 'undefined' && document.cookie.split('; ').some((cookie) => cookie === `${CONSENT_COOKIE}=analytics` || cookie === `${CONSENT_COOKIE}=all`)
-}
-
-function saveConsent(analytics: boolean) {
-  const secure = window.location.protocol === 'https:' ? '; Secure' : ''
-  document.cookie = `${CONSENT_COOKIE}=${analytics ? 'analytics' : 'essential'}; max-age=31536000; path=/; SameSite=Lax${secure}`
-  window.dispatchEvent(new Event(CONSENT_EVENT))
-}
-
 function CookieBanner({ settings }: { settings: CmsContent['settings'] }) {
-  const [choiceKnown, setChoiceKnown] = useState(false)
+  const [choiceKnown, setChoiceKnown] = useState<boolean | null>(null)
   const [preferencesOpen, setPreferencesOpen] = useState(false)
   const [analyticsAllowed, setAnalyticsAllowed] = useState(false)
 
   useEffect(() => {
-    setChoiceKnown(document.cookie.split('; ').some((cookie) => cookie.startsWith(`${CONSENT_COOKIE}=`)))
-    setAnalyticsAllowed(hasAnalyticsConsent())
+    const sync = () => {
+      const choice = readConsent()
+      setChoiceKnown(choice !== null)
+      setAnalyticsAllowed(choice?.analytics ?? false)
+      setPreferencesOpen(false)
+    }
+    const open = () => {
+      setAnalyticsAllowed(readConsent()?.analytics ?? false)
+      setPreferencesOpen(true)
+    }
+    const syncStorage = (event: StorageEvent) => { if (event.key === CONSENT_STORAGE_KEY || event.key === null) { refreshConsentFromStorage(); sync() } }
+    sync()
+    window.addEventListener(CONSENT_EVENT, sync)
+    window.addEventListener(CONSENT_OPEN_EVENT, open)
+    window.addEventListener('storage', syncStorage)
+    return () => {
+      window.removeEventListener(CONSENT_EVENT, sync)
+      window.removeEventListener(CONSENT_OPEN_EVENT, open)
+      window.removeEventListener('storage', syncStorage)
+    }
   }, [])
 
   const choose = (analytics: boolean) => {
-    saveConsent(analytics)
     setAnalyticsAllowed(analytics)
     setChoiceKnown(true)
     setPreferencesOpen(false)
+    saveConsent(analytics)
   }
   const openPreferences = () => {
-    setAnalyticsAllowed(hasAnalyticsConsent())
+    setAnalyticsAllowed(readConsent()?.analytics ?? false)
     setPreferencesOpen(true)
   }
   const title = settings.cookieTitle || 'Cookie preferences'
-  const description = settings.cookieDescription || 'Choose whether to allow analytics. Your choice is saved on this device and can be changed later.'
+  const description = settings.cookieDescription || 'Choose whether to allow analytics. You can change your choice using Cookie preferences in the footer.'
 
-  if (choiceKnown && !preferencesOpen) {
-    return <button className="cookie-settings-button" type="button" onClick={openPreferences}>{settings.cookieManageLabel || 'Cookie preferences'}</button>
-  }
+  if (choiceKnown === null || (choiceKnown && !preferencesOpen)) return null
 
   return <aside className="cookie-banner" aria-label={title}>
     <div>
@@ -466,7 +478,13 @@ function CookieBanner({ settings }: { settings: CmsContent['settings'] }) {
   </aside>
 }
 
-export function HomePage({ mode = 'india', content = createEmptyCmsContent() }: { mode?: SiteMode; content?: CmsContent }) { return <div className="igas-site"><Header mode={mode} navigation={content.navigation} /><OrganizationSchema /><main id="main-content" tabIndex={-1}><Hero settings={content.settings} /><StatsSection content={content} /><AboutStorySection settings={content.settings} /><ServicesSection content={content} /><IndustriesSection content={content} /><InsightsCarousel content={content} /><LeadershipPresenceSection content={content} /><CareersSection content={content} /></main><Footer mode={mode} footer={content.footer} /></div> }
+function HomeContactSection({ content }: { content: CmsContent }) {
+  const { settings } = content
+  if (!settings.contactTitle) return null
+  return <section className="container home-contact-section"><div><p className="eyebrow">{settings.contactEyebrow}</p><h2>{settings.contactTitle}</h2>{settings.contactIntro && <p>{settings.contactIntro}</p>}</div><div className="home-contact-actions"><Link className="button button-dark" href={settings.contactCtaHref || '/contact'}>{settings.contactCtaLabel || 'Contact us'}<ArrowUpRight size={17} /></Link>{settings.contactEmail && <a href={`mailto:${settings.contactEmail}`}>{settings.contactEmail}</a>}</div></section>
+}
+
+export function HomePage({ mode = 'india', content = createEmptyCmsContent() }: { mode?: SiteMode; content?: CmsContent }) { return <div className="igas-site"><Header mode={mode} navigation={content.navigation} /><OrganizationSchema /><main id="main-content" tabIndex={-1}><Hero content={content} /><StatsSection content={content} /><InsightsCarousel content={content} /><AboutStorySection settings={content.settings} /><ServicesSection content={content} /><IndustriesSection content={content} /><LeadershipPresenceSection content={content} /><CareersSection content={content} /><HomeContactSection content={content} /></main><Footer mode={mode} footer={content.footer} /></div> }
 
 export function ListingPage({ type, content }: { type: 'services' | 'industries' | 'insights' | 'careers' | 'offices'; content: CmsContent }) {
   const mode = content.mode
@@ -479,35 +497,45 @@ export function ListingPage({ type, content }: { type: 'services' | 'industries'
   const ungroupedIndustries = content.industries.filter((industry) => !groupedIndustrySlugs.has(industry.slug))
   return <div className="igas-site"><Header mode={mode} /><main id="main-content" tabIndex={-1} className="inner-page"><div className="container page-intro"><p className="eyebrow">{eyebrow}</p><h1>{title}</h1>{intro && <p className="lead">{intro}</p>}</div>
     {type === 'services' && <div className="container listing-grid service-directory">{content.services.length ? content.services.map(item => <Link className="listing-card dark-card service-directory-card" href={`/services/${item.slug}`} key={item.slug}>{item.media?.src && <div className="listing-card-photo"><img src={item.media.src} alt={item.media.alt || item.title} loading="lazy" /></div>}<div className="service-directory-body">{item.tag && <span className="service-directory-tag">{item.tag}</span>}<h2>{item.title}</h2>{(item.shortDescription || item.description) && <p>{item.shortDescription || item.description}</p>}<span className="service-directory-action">Explore service <ArrowUpRight size={18} aria-hidden="true" /></span></div></Link>) : <EmptyState label="Services will appear here when published." />}</div>}
-    {type === 'industries' && <div className="container listing-grid">{content.focusAreas.map((area) => <article className="listing-card" id={area.slug} key={area.slug}>{(() => { const image = content.industries.find(industry => area.industries.some(item => item.slug === industry.slug) && industry.media?.src)?.media; return image?.src ? <div className="listing-card-photo"><img src={image.src} alt={image.alt || area.title} loading="lazy" /></div> : null })()}<span>{eyebrow}</span><h2>{area.title}</h2>{area.description && <p>{area.description}</p>}<div className="focus-area-industries">{area.industries.map((industry) => <Link key={industry.slug} href={`/industries/${industry.slug}`}>{industry.title}<ArrowUpRight size={14} /></Link>)}</div></article>)}{ungroupedIndustries.map((item) => <Link className="listing-card" href={`/industries/${item.slug}`} key={item.slug}>{item.media?.src && <div className="listing-card-photo"><img src={item.media.src} alt={item.media.alt || item.title} loading="lazy" /></div>}<span>{item.title}</span><h2>{item.title}</h2>{(item.shortDescription || item.description) && <p>{item.shortDescription || item.description}</p>}<ArrowUpRight /></Link>)}{!content.industries.length && !content.focusAreas.length && <EmptyState label="Industries will appear here when published." />}</div>}
+    {type === 'industries' && <div className="container listing-grid industry-directory">{content.focusAreas.map((area) => <article className="listing-card" id={area.slug} key={area.slug}>{(() => { const image = area.media || content.industries.find(industry => area.industries.some(item => item.slug === industry.slug) && industry.media?.src)?.media; return image?.src ? <div className="listing-card-photo"><img src={image.src} alt={image.alt || area.title} loading="lazy" /></div> : null })()}<span>{eyebrow}</span><h2>{area.title}</h2>{area.description && <p>{area.description}</p>}<div className="focus-area-industries">{area.industries.map((industry) => <Link key={industry.slug} href={`/industries/${industry.slug}`}>{industry.title}<ArrowUpRight size={14} /></Link>)}</div></article>)}{ungroupedIndustries.map((item) => <Link className="listing-card" href={`/industries/${item.slug}`} key={item.slug}>{item.media?.src && <div className="listing-card-photo"><img src={item.media.src} alt={item.media.alt || item.title} loading="lazy" /></div>}<span>{item.title}</span><h2>{item.title}</h2>{(item.shortDescription || item.description) && <p>{item.shortDescription || item.description}</p>}<ArrowUpRight /></Link>)}{!content.industries.length && !content.focusAreas.length && <EmptyState label="Industries will appear here when published." />}</div>}
     {type === 'insights' && <div className="container inner-articles">{content.articles.length ? <ArticleListing articles={content.articles} /> : <EmptyState label="Articles will appear here when published." />}</div>}
-    {type === 'offices' && <div className="container offices-grid">{content.offices.length ? content.offices.map((office) => <Link href={`/offices/${office.slug}`} className="office-tile" key={office.slug}>{office.media?.src && <div className="office-card-photo"><img src={office.media.src} alt={office.media.alt || 'Illustrative business setting'} loading="lazy" /></div>}<p className="eyebrow">{office.country}</p><h2>{office.city}</h2><p>{office.address || office.detail}</p><ArrowUpRight /></Link>) : <EmptyState label="Office information will appear here when published." />}</div>}
-    {type === 'careers' && <div className="container jobs-list">{(content.settings.careersImage?.src || content.settings.careersImageUrl) && <img className="careers-directory-photo" src={content.settings.careersImage?.src || content.settings.careersImageUrl} alt={content.settings.careersImage?.alt || 'Illustrative workplace collaboration'} />}{content.jobs.length ? content.jobs.map((job) => <Link className="job-row" href={`/careers/${job.slug}`} key={job.slug}><div><span>{job.employmentType}</span><h2>{job.title}</h2></div><p>{job.location}</p><ArrowUpRight /></Link>) : <EmptyState label="There are no open roles at this time." />}</div>}
+    {type === 'offices' && <OfficeDirectory offices={content.offices} />}
+    {type === 'careers' && <div className="container jobs-list">{(content.settings.careersPageImageUrl || content.settings.careersImage?.src || content.settings.careersImageUrl) && <img className="careers-directory-photo" src={content.settings.careersPageImageUrl || content.settings.careersImage?.src || content.settings.careersImageUrl} alt={content.settings.careersPageImageAlt || content.settings.careersImage?.alt || 'Illustrative workplace collaboration'} />}{content.jobs.length ? content.jobs.map((job) => <Link className="job-row" href={`/careers/${job.slug}`} key={job.slug}><div><span>{job.employmentType}</span><h2>{job.title}</h2></div><p>{job.location}</p><ArrowUpRight /></Link>) : <EmptyState label="There are no open roles at this time." />}</div>}
   </main><Footer mode={mode} /></div>
 }
 
 export function NotFoundPage() { return <div className="igas-site"><Header mode="india" /><main id="main-content" tabIndex={-1} className="not-found-page"><div className="container"><p className="eyebrow">404 / Page not found</p><h1>That page has moved<br /><em>or never stood still.</em></h1><p className="lead">The page you are looking for is unavailable. Return to the homepage or explore our services.</p><div className="not-found-actions"><Link className="button button-dark" href="/">Back to home <ArrowUpRight size={16} /></Link><Link className="arrow-link" href="/services">Explore services <ArrowUpRight size={17} /></Link></div></div></main><Footer mode="india" /></div> }
 
 export function DetailPage({ title, description, eyebrow = 'IGAS', content, path = '/', mode = 'india', article = false, author, media, related = [] }: { title: string; description: string; eyebrow?: string; content?: ArticleContentBlock[]; path?: string; mode?: SiteMode; article?: boolean; author?: string; media?: CmsMedia; related?: Array<CmsRelatedItem & { href: string }> }) {
-  const settings = useContext(CmsChromeContext).content?.settings
+  const cms = useContext(CmsChromeContext).content
+  const settings = cms?.settings
   const headings = articleHeadings(content)
   const relatedLabel = (href: string) => href.startsWith('/latest-thinking/') ? 'Insight' : href.startsWith('/services/') ? 'Service' : href.startsWith('/industries/') ? 'Industry' : 'Leadership'
+  const relatedMedia = (item: CmsRelatedItem & { href: string }) => {
+    const collection = item.href.startsWith('/latest-thinking/') ? cms?.articles : item.href.startsWith('/services/') ? cms?.services : item.href.startsWith('/industries/') ? cms?.industries : undefined
+    return collection?.find(entry => entry.slug === item.slug)?.media
+  }
   return <div className="igas-site"><Header mode={mode} /><BreadcrumbSchema items={[{ name: 'Home', path: '/' }, ...(article ? [{ name: 'Latest thinking', path: '/latest-thinking' }] : []), { name: title, path }]} />
     <main id="main-content" tabIndex={-1} className={cx('detail-page', article && 'article-detail')}>
       <div className="container detail-hero">
         <nav className="breadcrumbs" aria-label="Breadcrumb"><Link href="/">Home</Link><span aria-hidden="true">/</span>{article && <><Link href="/latest-thinking">Latest thinking</Link><span aria-hidden="true">/</span></>}<span aria-current="page">{title}</span></nav>
-        <p className="eyebrow">{eyebrow}</p><h1>{title}</h1>
-        {description && <p className="lead article-standfirst">{description}</p>}
-        {article && <div className="article-reading-meta">{author && <span>By {author}</span>}{content?.length ? <span>{readingMinutes(content)} min read</span> : null}</div>}
-        {!article && settings?.contactCtaLabel && <Link className="button button-dark" href={settings.contactCtaHref || '/contact'}>{settings.contactCtaLabel}<ArrowUpRight size={16} /></Link>}
-        {media?.src && <figure className="detail-cover"><img src={media.src} alt={media.alt || title} width={media.width} height={media.height} />{media.caption && <figcaption>{media.caption}</figcaption>}</figure>}
+        <div className={cx(article && 'article-hero-layout', article && !media?.src && 'article-hero-without-image')}>
+          <div className={article ? 'article-hero-copy' : undefined}>
+            <p className="eyebrow">{eyebrow}</p><h1>{title}</h1>
+            {description && <p className="lead article-standfirst">{description}</p>}
+            {article && <div className="article-reading-meta"><span>{author ? `By ${author}` : 'IGAS perspectives'}</span>{content?.length ? <span><Clock3 size={14} aria-hidden="true" />{readingMinutes(content)} min read</span> : null}</div>}
+            {!article && settings?.contactCtaLabel && <Link className="button button-dark" href={settings.contactCtaHref || '/contact'}>{settings.contactCtaLabel}<ArrowUpRight size={16} /></Link>}
+          </div>
+          {media?.src && <figure className="detail-cover"><img src={media.src} alt={media.alt || title} width={media.width} height={media.height} fetchPriority={article ? 'high' : undefined} />{media.caption && <figcaption>{media.caption}</figcaption>}</figure>}
+        </div>
       </div>
       {content?.length ? <div className={cx('container detail-body', article && 'article-reading-layout')}>
-        {article && headings.length > 0 && <aside className="article-contents"><nav aria-label="In this article"><p className="eyebrow">In this article</p><ol>{headings.map((item) => <li key={item.id} className={item.level > 2 ? 'article-contents-nested' : undefined}><a href={`#${item.id}`}>{item.text}</a></li>)}</ol></nav></aside>}
-        <article className="article-reading-body"><RichText content={content} /></article>
+        {article && <aside className="article-contents">{headings.length > 0 && <nav aria-label="In this article"><p className="eyebrow">In this article</p><ol>{headings.map((item) => <li key={item.id} className={item.level > 2 ? 'article-contents-nested' : undefined}><a href={`#${item.id}`}>{item.text}</a></li>)}</ol></nav>}<ArticleReadingTools key={path} />{settings?.contactCtaLabel && <div className="article-sidebar-contact"><p>Explore what this means for your business.</p><Link href={settings.contactCtaHref || '/contact'}>{settings.contactCtaLabel}<ArrowUpRight size={15} /></Link></div>}</aside>}
+        <article className="article-reading-body"><RichText content={content} editorial={article} />{article && <div className="article-endnote"><span className="article-endnote-mark" aria-hidden="true" /><p>IGAS perspectives</p><Link href="/latest-thinking">Explore more thinking<ArrowUpRight size={15} /></Link></div>}</article>
       </div> : null}
-      {related.length > 0 && <section className="container article-related"><div className="article-related-heading"><p className="eyebrow">Continue exploring</p><h2>Related perspectives and expertise</h2></div><div className="listing-grid">{related.map((item) => <Link className="listing-card" href={item.href} key={item.href}><span className="eyebrow">{relatedLabel(item.href)}</span><h3>{item.title}</h3><ArrowUpRight /></Link>)}</div></section>}
+      {article && settings?.contactTitle && <section className="container article-conversation"><div><p className="eyebrow">From insight to action</p><h2>{settings.contactTitle}</h2>{settings.contactIntro && <p>{settings.contactIntro}</p>}</div><Link className="button button-dark" href={settings.contactCtaHref || '/contact'}>{settings.contactCtaLabel || 'Contact us'}<ArrowUpRight size={17} /></Link></section>}
+      {related.length > 0 && <section className="container article-related"><div className="article-related-heading"><p className="eyebrow">Continue exploring</p><h2>Related perspectives and expertise</h2></div><div className="listing-grid">{related.map((item) => { if (!article) return <Link className="listing-card" href={item.href} key={item.href}><span className="eyebrow">{relatedLabel(item.href)}</span><h3>{item.title}</h3><ArrowUpRight /></Link>; const image = relatedMedia(item); return <Link className={cx('listing-card', article && 'article-related-card')} href={item.href} key={item.href}>{image?.src && <div className="article-related-photo"><img src={image.src} alt={image.alt || item.title} loading="lazy" /></div>}<div className={article ? 'article-related-copy' : undefined}><span className="eyebrow">{relatedLabel(item.href)}</span><h3>{item.title}</h3><span className="article-related-action">Explore<ArrowUpRight size={17} aria-hidden="true" /></span></div></Link> })}</div></section>}
     </main><Footer mode={mode} /></div>
 }
 
-export function AboutPage({ content = createEmptyCmsContent() }: { content?: CmsContent }) { const menu = content.settings.megaMenus.find((item) => item.section === 'who-we-are')!; const hasAboutCopy = Boolean(content.settings.aboutTitle || content.settings.aboutText); const hasStory = Boolean(menu.title || menu.description || content.leadership.length || content.offices.length || content.settings.careersText); return <div className="igas-site"><Header mode={content.mode} navigation={content.navigation} /><main id="main-content" tabIndex={-1} className="about-page">{hasAboutCopy ? <><div className="container about-hero"><div><p className="eyebrow">{menu.label}</p>{content.settings.aboutTitle && <h1>{content.settings.aboutTitle}</h1>}{content.settings.aboutText && <p className="lead">{content.settings.aboutText}</p>}</div>{(content.settings.aboutImage?.src || content.settings.aboutImageUrl) && <img className="about-profile-image" src={content.settings.aboutImage?.src || content.settings.aboutImageUrl} alt={content.settings.aboutImage?.alt || 'Illustrative business discussion'} />}</div>{hasStory && <div className="container about-split">{menu.title && <h2>{menu.title}</h2>}<div>{menu.description && <p>{menu.description}</p>}{content.settings.aboutText && <p>{content.settings.aboutText}</p>}<div className="purpose-grid">{content.leadership[0] && <div><span className="eyebrow">Leadership</span><p>{content.leadership[0].position}</p></div>}{content.offices.length > 0 && <div><span className="eyebrow">Our offices</span><p>{content.offices.map((office) => office.city).join(', ')}</p></div>}{content.settings.careersText && <div><span className="eyebrow">Careers</span><p>{content.settings.careersText}</p></div>}</div></div></div>}</> : <div className="container"><EmptyState label="About information will appear here when published." /></div>}</main><Footer mode={content.mode} footer={content.footer} /></div> }
+export function AboutPage({ content = createEmptyCmsContent() }: { content?: CmsContent }) { const menu = content.settings.megaMenus.find((item) => item.section === 'who-we-are')!; const hasAboutCopy = Boolean(content.settings.aboutTitle || content.settings.aboutText); const hasStory = Boolean(menu.title || menu.description || content.leadership.length || content.offices.length || content.settings.careersText); return <div className="igas-site"><Header mode={content.mode} navigation={content.navigation} /><main id="main-content" tabIndex={-1} className="about-page">{hasAboutCopy ? <><div className="container about-hero"><div><p className="eyebrow">{menu.label}</p>{content.settings.aboutTitle && <h1>{content.settings.aboutTitle}</h1>}{content.settings.aboutText && <p className="lead">{content.settings.aboutText}</p>}</div>{(content.settings.aboutPageImageUrl || content.settings.aboutImage?.src || content.settings.aboutImageUrl) && <img className="about-profile-image" src={content.settings.aboutPageImageUrl || content.settings.aboutImage?.src || content.settings.aboutImageUrl} alt={content.settings.aboutPageImageAlt || content.settings.aboutImage?.alt || 'Illustrative business discussion'} />}</div>{hasStory && <div className="container about-split">{menu.title && <h2>{menu.title}</h2>}<div>{menu.description && <p>{menu.description}</p>}{content.settings.aboutText && <p>{content.settings.aboutText}</p>}<div className="purpose-grid">{content.leadership[0] && <div><span className="eyebrow">Leadership</span><p>{content.leadership[0].position}</p></div>}{content.offices.length > 0 && <div><span className="eyebrow">Our offices</span><p>{content.offices.map((office) => office.city).join(', ')}</p></div>}{content.settings.careersText && <div><span className="eyebrow">Careers</span><p>{content.settings.careersText}</p></div>}</div></div></div>}</> : <div className="container"><EmptyState label="About information will appear here when published." /></div>}</main><Footer mode={content.mode} footer={content.footer} /></div> }

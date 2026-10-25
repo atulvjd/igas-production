@@ -1,3 +1,51 @@
+## Public email placeholder — 25 October 2026
+
+All public contact addresses in Site settings, Footer, Offices and custom/policy Page content now use `example@example.10.com`, including India and Global published/draft versions. The contact input placeholder and content-population templates use the same address. The original firm-profile address was replaced at the user’s request. CMS administrator identities and backend delivery configuration are outside this content change. Before snapshots are retained under `cms/.tmp/placeholder-email-*/`.
+
+## Contrast repair — 25 October 2026
+
+The About hero retained white/pale-pink text from its earlier dark-green treatment after its surface changed to pale green. Its source rules now use navy foreground and the shared muted text colour. The same review found dark CTA body text on the navy Our Approach and Working with IGAS panels: the theme selector incorrectly targeted a descendant instead of the CTA element itself. The corrected selector supports dark/accent CTA themes. Footer copyright/policy text also uses the darker shared muted colour.
+
+Validation: nineteen representative routes were checked at 1440 and 390 pixels. The solid-background text scan found no remaining failures against 4.5:1 for normal text and 3:1 for large text; image/gradient backgrounds were excluded from that automated measurement. About screenshots were inspected, responsive overflow checks passed, and CMS/footer integration requests succeeded. This was a targeted regression check, not a complete accessibility audit.
+
+Both local servers were running and CMS/footer requests succeeded; the terminal termination message shown in the screenshot referred to the earlier controlled CMS restart. No database or content changes were needed for these colour corrections.
+
+## Unique image assignment — 25 October 2026
+
+Published 71 independent photo assignments across India/Global presentation settings, eight services, twelve industries, seventeen articles, two offices, six focus areas, two illustrative leadership contexts and eight custom-page image slots. Distinct content and section slots no longer reuse generic photographs. Mumbai/Bengaluru use different city images. Home, About, Contact and Careers now have separate optional CMS image fields; homepage presence/leadership panels and focus areas also have their own photos. Media Library uploads remain preferred where the existing components support them.
+
+The CMS was stopped before the additive schema edits, with an online SQLite backup retained. It restarted using the installed Node 24 runtime matching the SQLite binary. API snapshots/journals are under `cms/.tmp/unique-images-*/`. Sources, editing guidance and the repeatable assignment/verification scripts are documented in `docs/IMAGE-INVENTORY.md`.
+
+Fresh checks verified all 71 sources available and distinct by source identity and preview bytes; 59 rendered routes had no repeated photograph within main content. All 17 article bodies and footer links remained intact. Frontend/CMS TypeScript and rich-text checks passed. A snapshot comparison preserved non-image copy and counts for 59 published records. Browser checks on eleven main page types at 320, 390, 768 and 1440 pixels found no horizontal overflow or collapsed image frames; desktop/mobile screenshots were inspected.
+
+## Social icons and hover feedback — 25 October 2026
+
+The footer's right column uses accessible SVG marks for the CMS LinkedIn, Instagram and X links, with Privacy Policy, Cookie Policy, Terms of Use and Disclaimer directly beneath them. Unknown future social destinations use a generic website icon. The links remain CMS-controlled; no social URLs were replaced.
+
+Content cards and selected panels now lift by 2 pixels with a soft shadow on precise-pointer hover. Reduced-motion preferences suppress movement, and transforms leave the layout dimensions unchanged. The homepage Latest Thinking carousel now advances every 2 seconds instead of the original 5, with a 380 ms slide transition instead of 700 ms. Existing hover/focus/visibility/pause conditions remain in use.
+
+Validation: TypeScript, diff checks and the live footer integration check passed. Browser checks verified SVG accessibility labels, four policy links, actual carousel advance, Pause, immediate Next, hover feedback without layout-width changes, reduced-motion overrides, and no horizontal overflow at 320, 390, 768 and 1440 pixels. The final footer screenshot was inspected.
+
+## Office interaction and directory card repair — 24 October 2026
+
+The office directory now uses independent bordered cards with a proper gap and transparent grid background; it no longer leaves a grey padding band underneath the cards. Address text and actions flow naturally, without an absolutely positioned arrow overlapping long addresses. City filters, result counts, directions, copy-address feedback and office-detail links use the existing published CMS office records. Email and phone actions appear only when those fields exist. Directions use supplied coordinates when available, otherwise the full CMS street address; no geocoding or embedded third-party map is required. Existing editorial office images remain editable in the CMS.
+
+The same reusable office actions appear on contact-page office cards and individual office pages. Other directory cards now clip images to their rounded corners and reserve bottom space for arrows, including industry/focus cards and shared related/leadership cards. No CMS schema or record changes are required.
+
+Validation: frontend TypeScript and diff checks passed. Browser checks at 320, 390, 768 and 1440 pixels verified office-card gaps, transparent grid background, action/address separation, both city filters, directions URLs, and overflow/arrow clearance across offices, industry, service, leadership, contact and both office-detail pages. Address copying and denied-clipboard guidance passed; office images loaded visibly on desktop and mobile. No directions link or email action was submitted during checks.
+
+## Homepage and contact refinement — 24 October 2026
+
+The homepage now places Latest Thinking immediately after A Point of View. It shows the first six published industries in CMS `sortOrder`, with a link to the full industry directory. Change industry order in the CMS to change the selection; all 12 remain published and accessible. The hero retains the recovered profile-based copy, image and calls to action, with direct links to the published audit, tax and advisory services where available.
+
+The footer request now explicitly populates each relation/component: Strapi rejects mixing wildcard population with a nested population object, which had caused the frontend to fall back to basic footer content. The footer again includes office addresses and a short industry directory, alongside the expanded firm description, services, newsletter and policies. The homepage has a contact invitation using Site settings. The contact page now has a grouped form, attachment guidance, privacy link, direct email card and published office cards. Existing submission behavior is retained; delivery still requires the configured contact webhook.
+
+CMS editing: hero and contact copy are under Site settings for each mode; firm description is under Footer → Signature; office names/addresses are under Offices. The `scripts/refine-home-and-contact.mjs` update uses existing fields, backs up both draft and published records, and verifies publication. Its snapshots are under ignored `cms/.tmp/home-contact-*/`. Content remains local CMS data, separately from Git-tracked source.
+
+Validation: frontend TypeScript and all 19 readiness checks passed. Browser checks passed at 320, 390, 768 and 1440 pixels for hero copy, section order, six selected industries, footer content, contact controls and no horizontal overflow. A simulated contact failure stayed aligned above the submit button and allowed retry. `scripts/check-live-footer.mjs` verified the actual CMS signature and links on `/`, `/contact`, `/our-approach` and `/global`. Screenshots were inspected; no live enquiry was sent.
+
+Before any future Git checkout/rebase that changes CMS schemas, stop the CMS and take a SQLite online backup. Running the development server while loading an older schema can remove database columns even if the final schema later restores them. Existing recovery snapshots and database backups must be retained.
+
 # Local CMS content preview
 
 ## Interaction refinement — 24 October 2026
@@ -48,7 +96,7 @@ The user-supplied `IGAS International - Top firm profile - Bangalore.pdf` now in
 
 Homepage and approach statistics use the profile's 31 offices, 19 cities, 400+ employees, 38 founding partners and 40+ years of team/partner experience. These are explicitly profile-sourced figures, not independently verified current counts; team experience is not presented as the firm's age. Deals, Forensic and Strategy were added to the existing services directory. Existing service bodies were retained with a short profile-based approach section; the five industry pages gained sector context, and Healthcare now includes Pharma.
 
-The illustrative office was replaced with the Mumbai corporate office, and the Bengaluru branch was added using the addresses on page 19. Displayed contact email now uses `Mohan@caigas.in` from that page. This updates public content, not backend email delivery configuration. Demo leadership and demo job records remain unchanged because the profile does not supply named leaders or current vacancies.
+The illustrative office was replaced with the Mumbai corporate office, and the Bengaluru branch was added using the addresses on page 19. Displayed contact email now uses `example@example.10.com` from that page. This updates public content, not backend email delivery configuration. Demo leadership and demo job records remain unchanged because the profile does not supply named leaders or current vacancies.
 
 Repeatable update: `scripts/apply-firm-profile.mjs`. Its ignored `cms/.tmp/firm-profile-*/` directories retain before snapshots and change journals; the earliest snapshot preserves the state before this update. Successful final run verified 17 CMS writes, followed by a successful website cache refresh. Ten local website routes returned HTTP 200 and contained the expected profile copy, including all three new service pages and both offices. No production deployment is claimed.
 

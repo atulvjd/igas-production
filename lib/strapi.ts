@@ -64,12 +64,13 @@ function mergeSettings(fallback: CmsSettings, record: ApiRecord): CmsSettings {
       const value = item.cookieConsent && typeof item.cookieConsent === 'object' ? stringValue(item.cookieConsent as ApiRecord, key) : ''
       return !settings[field] && value ? [[field, value]] : []
     })),
+    ...Object.fromEntries((['contactImageUrl', 'aboutPageImageUrl', 'careersPageImageUrl', 'presenceImageUrl', 'leadershipImageUrl'] as const).map(key => [key, mediaUrl(settings[key] || '')])),
     heroImageUrl: mediaUrl(settings.heroImageUrl),
     aboutImageUrl: mediaUrl(settings.aboutImageUrl),
     careersImageUrl: mediaUrl(settings.careersImageUrl),
-    heroImage: mediaComponent(item.heroImage),
-    aboutImage: mediaComponent(item.aboutImage),
-    careersImage: mediaComponent(item.careersImage),
+    heroImage: mediaComponent(item.heroImage, mediaUrl(settings.heroImageUrl)),
+    aboutImage: mediaComponent(item.aboutImage, mediaUrl(settings.aboutImageUrl)),
+    careersImage: mediaComponent(item.careersImage, mediaUrl(settings.careersImageUrl)),
     logo: mediaComponent(item.logo),
     globalLogo: mediaComponent(item.globalLogo),
     megaMenus,
@@ -80,7 +81,7 @@ function mergeSettings(fallback: CmsSettings, record: ApiRecord): CmsSettings {
 function normalizeSection(record: ApiRecord): CmsSection {
   const item = attributes(record)
   const component = typeof record.__component === 'string' ? record.__component : stringValue(item, '__component')
-  const media = mediaComponent(item.image)
+  const media = mediaComponent(item.image, stringValue(item, 'imageUrl'))
   const slides = Array.isArray(item.slides) ? item.slides.map((slide) => {
     if (!slide || typeof slide !== 'object') return slide
     const value = attributes(slide as ApiRecord)
@@ -221,7 +222,7 @@ function normalizeLeadership(record: ApiRecord, mode: SiteMode): CmsLeadership {
     slug: stringValue(item, 'slug'),
     position: stringValue(item, 'position'),
     biography: contentBlocks(item.biography),
-    media: mediaComponent(item.profileImage, '', name),
+    media: mediaComponent(item.profileImage, stringValue(item, 'imageUrl'), stringValue(item, 'imageAlt', name)),
     email: stringValue(item, 'email'),
     linkedInUrl: stringValue(item, 'linkedInUrl'),
     relatedServices: relatedItems(item.relatedServices),
@@ -336,7 +337,7 @@ export async function getStrapiContent(mode: SiteMode = 'india'): Promise<CmsCon
       requestCollectionSafely(`/api/offices?${modeFilter(mode)}&sort=sortOrder:asc&populate=*&pagination[pageSize]=100`, url, token, 'offices'),
       requestCollectionSafely(`/api/leadership-profiles?${modeFilter(mode)}&sort=sortOrder:asc&populate=*&pagination[pageSize]=100`, url, token, 'leadership'),
       requestCollectionSafely(`/api/navigation-items?${modeFilter(mode)}&filters[visible][$eq]=true&sort=order:asc&pagination[pageSize]=100`, url, token, 'navigation'),
-      requestCollectionSafely(`/api/footers?${modeFilter(mode)}&populate=*&populate[columns][populate][links]=*&pagination[pageSize]=1`, url, token, 'footer'),
+      requestCollectionSafely(`/api/footers?${modeFilter(mode)}&populate[columns][populate][links]=*&populate[usefulLinks]=*&populate[legalLinks]=*&populate[socialLinks]=*&pagination[pageSize]=1`, url, token, 'footer'),
       requestCollectionSafely(`/api/focus-areas?${modeFilter(mode)}&sort=sortOrder:asc&populate[industries][fields][0]=title&populate[industries][fields][1]=slug&pagination[pageSize]=100`, url, token, 'focus areas'),
       requestCollectionSafely(`/api/pages?${modeFilter(mode)}&fields[0]=path&fields[1]=title&fields[2]=description&pagination[pageSize]=100`, url, token, 'pages'),
     ])
@@ -398,6 +399,7 @@ export async function getStrapiContent(mode: SiteMode = 'india'): Promise<CmsCon
         }).filter((industry) => industry.slug),
         mode: stringValue(item, 'mode', mode) as SiteMode,
         sortOrder: numberValue(item, 'sortOrder') || 0,
+        media: mediaValue(undefined, mediaUrl(stringValue(item, 'imageUrl')), stringValue(item, 'imageAlt')),
       }
     }) : []
 
@@ -466,7 +468,7 @@ export async function getStrapiPage(pathname: string, mode: SiteMode = 'india'):
     if (!records.length) return null
     const [navigationRecords, footerRecords] = await Promise.all([
       requestCollectionSafely(`/api/navigation-items?${modeFilter(mode)}&filters[visible][$eq]=true&sort=order:asc&pagination[pageSize]=100`, url, token, `${mode} navigation`),
-      requestCollectionSafely(`/api/footers?${modeFilter(mode)}&populate=*&populate[columns][populate][links]=*&pagination[pageSize]=1`, url, token, `${mode} footer`),
+      requestCollectionSafely(`/api/footers?${modeFilter(mode)}&populate[columns][populate][links]=*&populate[usefulLinks]=*&populate[legalLinks]=*&populate[socialLinks]=*&pagination[pageSize]=1`, url, token, `${mode} footer`),
     ])
     const item = attributes(records[0])
     const rawSections = Array.isArray(item.sections) ? item.sections : []

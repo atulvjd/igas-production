@@ -24,7 +24,7 @@ function CmsCarousel({ section }: { section: CmsSection }) {
 
 function CollectionListing({ section, content }: { section: CmsSection; content: CmsContent }) {
   const source = text(section, 'source')
-  const items: Array<{ title: string; description: string; href: string; image?: string; eyebrow?: string }> = source === 'services' ? content.services.map((item) => ({ title: item.title, description: item.description, href: `/services/${item.slug}`, eyebrow: item.tag }))
+  const items: Array<{ title: string; description: string; href: string; image?: string; eyebrow?: string }> = source === 'services' ? content.services.map((item) => ({ title: item.title, description: item.description, href: `/services/${item.slug}`, image: item.media?.src, eyebrow: item.tag }))
     : source === 'industries' ? content.industries.map((item) => ({ title: item.title, description: item.description, href: `/industries/${item.slug}`, image: item.media.src }))
       : source === 'articles' ? content.articles.filter((item) => !section.featuredOnly || item.featured).map((item) => ({ title: item.title, description: item.excerpt, href: `/latest-thinking/${item.slug}`, image: item.media.src, eyebrow: item.category }))
         : source === 'jobs' ? content.jobs.filter((item) => item.applicationStatus === 'open').map((item) => ({ title: item.title, description: item.shortDescription, href: `/careers/${item.slug}`, eyebrow: item.location }))

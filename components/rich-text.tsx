@@ -36,6 +36,14 @@ function renderNode(node: ArticleContentBlock, key: string, headingId?: string):
   }
 }
 
-export function RichText({ content = [], className = 'article-rich-content' }: { content?: ArticleContentBlock[]; className?: string }) {
-  return <div className={className}>{content.map((block, index) => renderNode(block, String(index), `section-${index}`))}</div>
+export function RichText({ content = [], className = 'article-rich-content', editorial = false }: { content?: ArticleContentBlock[]; className?: string; editorial?: boolean }) {
+  if (!editorial) return <div className={className}>{content.map((block, index) => renderNode(block, String(index), `section-${index}`))}</div>
+
+  // Retain the editor's order and original anchor IDs while grouping article sections.
+  const sections: Array<{ title: string; blocks: Array<{ block: ArticleContentBlock; index: number }> }> = []
+  content.forEach((block, index) => {
+    if (!sections.length || (block.type === 'heading' && (block.level || 2) <= 2)) sections.push({ title: block.type === 'heading' ? blockText(block) : '', blocks: [] })
+    sections[sections.length - 1].blocks.push({ block, index })
+  })
+  return <div className={className}>{sections.map((section, index) => <section key={index} className={`article-content-section${section.blocks.some(({ block }) => block.type === 'list') || /key takeaways|at a glance|practical checklist/i.test(section.title) ? ' article-highlight-section' : ''}${/key takeaways|at a glance|practical checklist/i.test(section.title) ? ' article-takeaway-section' : ''}`}>{section.blocks.map(({ block, index }) => renderNode(block, String(index), `section-${index}`))}</section>)}</div>
 }

@@ -2,12 +2,7 @@
 
 import { Analytics, type BeforeSendEvent } from '@vercel/analytics/next'
 import { useCallback, useEffect, useState } from 'react'
-
-const consentCookie = 'igas-consent=analytics'
-
-function hasAnalyticsConsent() {
-  return typeof document !== 'undefined' && document.cookie.split('; ').includes(consentCookie)
-}
+import { CONSENT_EVENT, CONSENT_STORAGE_KEY, hasAnalyticsConsent, refreshConsentFromStorage } from '@/lib/cookie-consent'
 
 export function ConsentAwareAnalytics() {
   const [hasEverConsented, setHasEverConsented] = useState(false)
@@ -17,8 +12,13 @@ export function ConsentAwareAnalytics() {
       if (hasAnalyticsConsent()) setHasEverConsented(true)
     }
     syncConsent()
-    window.addEventListener('igas-consent-change', syncConsent)
-    return () => window.removeEventListener('igas-consent-change', syncConsent)
+    const syncStorage = (event: StorageEvent) => { if (event.key === CONSENT_STORAGE_KEY || event.key === null) { refreshConsentFromStorage(); syncConsent() } }
+    window.addEventListener(CONSENT_EVENT, syncConsent)
+    window.addEventListener('storage', syncStorage)
+    return () => {
+      window.removeEventListener(CONSENT_EVENT, syncConsent)
+      window.removeEventListener('storage', syncStorage)
+    }
   }, [])
 
   const beforeSend = useCallback((event: BeforeSendEvent) => {

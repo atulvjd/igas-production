@@ -1,0 +1,570 @@
+[
+  {
+    "collection": "site-settings",
+    "key": "india",
+    "field": "heroImageUrl",
+    "url": "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "A collaborative business discussion; illustrative photography",
+    "source": "https://www.pexels.com/photo/3184291/"
+  },
+  {
+    "collection": "site-settings",
+    "key": "india",
+    "field": "aboutImageUrl",
+    "url": "https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "Hands joined together in a collaborative team; illustrative photography",
+    "source": "https://www.pexels.com/photo/3184418/"
+  },
+  {
+    "collection": "site-settings",
+    "key": "india",
+    "field": "careersImageUrl",
+    "url": "https://images.pexels.com/photos/1181403/pexels-photo-1181403.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "Colleagues learning and working together; illustrative photography",
+    "source": "https://www.pexels.com/photo/1181403/"
+  },
+  {
+    "collection": "site-settings",
+    "key": "india",
+    "field": "contactImageUrl",
+    "url": "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "A handshake at the start of a business conversation; illustrative photography",
+    "source": "https://www.pexels.com/photo/3184465/"
+  },
+  {
+    "collection": "site-settings",
+    "key": "india",
+    "field": "aboutPageImageUrl",
+    "url": "https://images.pexels.com/photos/1181619/pexels-photo-1181619.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "A team exchanging ideas around a meeting table; illustrative photography",
+    "source": "https://www.pexels.com/photo/1181619/"
+  },
+  {
+    "collection": "site-settings",
+    "key": "india",
+    "field": "careersPageImageUrl",
+    "url": "https://images.pexels.com/photos/3184325/pexels-photo-3184325.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "Colleagues collaborating with laptops; illustrative photography",
+    "source": "https://www.pexels.com/photo/3184325/"
+  },
+  {
+    "collection": "site-settings",
+    "key": "india",
+    "field": "presenceImageUrl",
+    "url": "https://images.pexels.com/photos/37853147/pexels-photo-37853147.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "Aerial view of the Mumbai cityscape; illustrative photography",
+    "source": "https://www.pexels.com/photo/37853147/"
+  },
+  {
+    "collection": "site-settings",
+    "key": "india",
+    "field": "leadershipImageUrl",
+    "url": "https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "A professional team discussing ideas; illustrative photography",
+    "source": "https://www.pexels.com/photo/3184339/"
+  },
+  {
+    "collection": "site-settings",
+    "key": "global",
+    "field": "heroImageUrl",
+    "url": "https://images.pexels.com/photos/1181406/pexels-photo-1181406.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "A business team gathered in a bright meeting room; illustrative photography",
+    "source": "https://www.pexels.com/photo/1181406/"
+  },
+  {
+    "collection": "site-settings",
+    "key": "global",
+    "field": "aboutImageUrl",
+    "url": "https://images.pexels.com/photos/3184423/pexels-photo-3184423.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "Colleagues joining hands in a team exercise; illustrative photography",
+    "source": "https://www.pexels.com/photo/3184423/"
+  },
+  {
+    "collection": "site-settings",
+    "key": "global",
+    "field": "careersImageUrl",
+    "url": "https://images.pexels.com/photos/3184357/pexels-photo-3184357.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "Colleagues working together in an open workspace; illustrative photography",
+    "source": "https://www.pexels.com/photo/3184357/"
+  },
+  {
+    "collection": "site-settings",
+    "key": "global",
+    "field": "contactImageUrl",
+    "url": "https://images.pexels.com/photos/3184300/pexels-photo-3184300.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "A team having a business conversation; illustrative photography",
+    "source": "https://www.pexels.com/photo/3184300/"
+  },
+  {
+    "collection": "site-settings",
+    "key": "global",
+    "field": "aboutPageImageUrl",
+    "url": "https://images.pexels.com/photos/3184301/pexels-photo-3184301.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "Colleagues greeting one another at work; illustrative photography",
+    "source": "https://www.pexels.com/photo/3184301/"
+  },
+  {
+    "collection": "site-settings",
+    "key": "global",
+    "field": "careersPageImageUrl",
+    "url": "https://images.pexels.com/photos/3184302/pexels-photo-3184302.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "An informal collaborative team meeting; illustrative photography",
+    "source": "https://www.pexels.com/photo/3184302/"
+  },
+  {
+    "collection": "site-settings",
+    "key": "global",
+    "field": "presenceImageUrl",
+    "url": "https://images.pexels.com/photos/33724508/pexels-photo-33724508.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "Mumbai skyline viewed from Marine Drive; illustrative photography",
+    "source": "https://www.pexels.com/photo/33724508/"
+  },
+  {
+    "collection": "site-settings",
+    "key": "global",
+    "field": "leadershipImageUrl",
+    "url": "https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "Colleagues reviewing information together; illustrative photography",
+    "source": "https://www.pexels.com/photo/3184360/"
+  },
+  {
+    "collection": "services",
+    "key": "tax-regulatory",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/6863183/pexels-photo-6863183.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "Tax planning documents with tax-labelled blocks; illustrative photography",
+    "source": "https://www.pexels.com/photo/6863183/"
+  },
+  {
+    "collection": "services",
+    "key": "risk-compliance",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/6801648/pexels-photo-6801648.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "Financial charts examined with a magnifying glass; illustrative photography",
+    "source": "https://www.pexels.com/photo/6801648/"
+  },
+  {
+    "collection": "services",
+    "key": "business-transformation",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/3184296/pexels-photo-3184296.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "A team planning change using a wall of notes; illustrative photography",
+    "source": "https://www.pexels.com/photo/3184296/"
+  },
+  {
+    "collection": "services",
+    "key": "advisory-consulting",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/3184639/pexels-photo-3184639.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "Colleagues reviewing business information together; illustrative photography",
+    "source": "https://www.pexels.com/photo/3184639/"
+  },
+  {
+    "collection": "services",
+    "key": "audit-assurance",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/7821484/pexels-photo-7821484.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "A professional examining printed financial records; illustrative photography",
+    "source": "https://www.pexels.com/photo/7821484/"
+  },
+  {
+    "collection": "services",
+    "key": "deals",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/5668859/pexels-photo-5668859.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "Business representatives shaking hands across a meeting table; illustrative photography",
+    "source": "https://www.pexels.com/photo/5668859/"
+  },
+  {
+    "collection": "services",
+    "key": "forensic",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/5668473/pexels-photo-5668473.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "A gavel beside a laptop illustrating careful investigation; illustrative photography",
+    "source": "https://www.pexels.com/photo/5668473/"
+  },
+  {
+    "collection": "services",
+    "key": "strategy",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/1181345/pexels-photo-1181345.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "A professional developing a plan at a whiteboard; illustrative photography",
+    "source": "https://www.pexels.com/photo/1181345/"
+  },
+  {
+    "collection": "industries",
+    "key": "financial-services",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/210607/pexels-photo-210607.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "Financial market prices on a trading display; illustrative photography",
+    "source": "https://www.pexels.com/photo/210607/"
+  },
+  {
+    "collection": "industries",
+    "key": "entertainment-media",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/3945313/pexels-photo-3945313.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "A film clapperboard on a production set; illustrative photography",
+    "source": "https://www.pexels.com/photo/3945313/"
+  },
+  {
+    "collection": "industries",
+    "key": "healthcare",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/2280571/pexels-photo-2280571.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "A laboratory scientist working with research equipment; illustrative photography",
+    "source": "https://www.pexels.com/photo/2280571/"
+  },
+  {
+    "collection": "industries",
+    "key": "manufacturing",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/1108101/pexels-photo-1108101.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "A factory worker operating industrial machinery; illustrative photography",
+    "source": "https://www.pexels.com/photo/1108101/"
+  },
+  {
+    "collection": "industries",
+    "key": "technology",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "Computer screens used for software development; illustrative photography",
+    "source": "https://www.pexels.com/photo/1181675/"
+  },
+  {
+    "collection": "industries",
+    "key": "real-estate",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/936722/pexels-photo-936722.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "Modern high-rise commercial buildings; illustrative photography",
+    "source": "https://www.pexels.com/photo/936722/"
+  },
+  {
+    "collection": "industries",
+    "key": "consumer-products-retail",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/264636/pexels-photo-264636.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "Fresh produce on display in a supermarket; illustrative photography",
+    "source": "https://www.pexels.com/photo/264636/"
+  },
+  {
+    "collection": "industries",
+    "key": "steel-metal",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/17167905/pexels-photo-17167905.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "Steel cutting machinery producing sparks; illustrative photography",
+    "source": "https://www.pexels.com/photo/17167905/"
+  },
+  {
+    "collection": "industries",
+    "key": "gold-bullion",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/386318/pexels-photo-386318.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "Gold bullion bars; illustrative photography",
+    "source": "https://www.pexels.com/photo/386318/"
+  },
+  {
+    "collection": "industries",
+    "key": "sports",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/399187/pexels-photo-399187.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "A floodlit sports field at night; illustrative photography",
+    "source": "https://www.pexels.com/photo/399187/"
+  },
+  {
+    "collection": "industries",
+    "key": "mining",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/29506757/pexels-photo-29506757.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "Heavy trucks operating in an open-pit mine; illustrative photography",
+    "source": "https://www.pexels.com/photo/29506757/"
+  },
+  {
+    "collection": "industries",
+    "key": "education",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/267885/pexels-photo-267885.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "Graduates celebrating an education milestone; illustrative photography",
+    "source": "https://www.pexels.com/photo/267885/"
+  },
+  {
+    "collection": "articles",
+    "key": "rethinking-risk-connected-world",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/1181316/pexels-photo-1181316.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "Technology professionals inspecting a server facility; illustrative photography",
+    "source": "https://www.pexels.com/photo/1181316/"
+  },
+  {
+    "collection": "articles",
+    "key": "building-resilient-organizations",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/3184428/pexels-photo-3184428.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "A team supporting one another in a collaborative exercise; illustrative photography",
+    "source": "https://www.pexels.com/photo/3184428/"
+  },
+  {
+    "collection": "articles",
+    "key": "technology-catalyst-for-change",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/1181467/pexels-photo-1181467.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "A developer working on a laptop; illustrative photography",
+    "source": "https://www.pexels.com/photo/1181467/"
+  },
+  {
+    "collection": "articles",
+    "key": "navigating-growth-changing-economy",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/6347729/pexels-photo-6347729.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "A financial trend viewed on a mobile device; illustrative photography",
+    "source": "https://www.pexels.com/photo/6347729/"
+  },
+  {
+    "collection": "articles",
+    "key": "future-of-business-transformation",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/3184644/pexels-photo-3184644.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "Colleagues sharing ideas during a planning session; illustrative photography",
+    "source": "https://www.pexels.com/photo/3184644/"
+  },
+  {
+    "collection": "articles",
+    "key": "audit-readiness-before-year-end",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/7681091/pexels-photo-7681091.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "Printed reports and financial information under review; illustrative photography",
+    "source": "https://www.pexels.com/photo/7681091/"
+  },
+  {
+    "collection": "articles",
+    "key": "organising-tax-records",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/4386373/pexels-photo-4386373.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "A calculator and financial records on a desk; illustrative photography",
+    "source": "https://www.pexels.com/photo/4386373/"
+  },
+  {
+    "collection": "articles",
+    "key": "cash-flow-visibility-growing-business",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "A hand reviewing figures and a financial chart; illustrative photography",
+    "source": "https://www.pexels.com/photo/590022/"
+  },
+  {
+    "collection": "articles",
+    "key": "internal-controls-growing-team",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/6693661/pexels-photo-6693661.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "A professional recording information on a laptop; illustrative photography",
+    "source": "https://www.pexels.com/photo/6693661/"
+  },
+  {
+    "collection": "articles",
+    "key": "responding-suspected-irregularity",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/5668772/pexels-photo-5668772.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "A professional examining records beside a gavel; illustrative photography",
+    "source": "https://www.pexels.com/photo/5668772/"
+  },
+  {
+    "collection": "articles",
+    "key": "preparing-transaction-information",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/3184431/pexels-photo-3184431.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "A close view of a business handshake; illustrative photography",
+    "source": "https://www.pexels.com/photo/3184431/"
+  },
+  {
+    "collection": "articles",
+    "key": "practical-transformation-roadmap",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/3184658/pexels-photo-3184658.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "A professional mapping ideas on a whiteboard; illustrative photography",
+    "source": "https://www.pexels.com/photo/3184658/"
+  },
+  {
+    "collection": "articles",
+    "key": "management-reporting-decisions",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "Colleagues reviewing printed business charts; illustrative photography",
+    "source": "https://www.pexels.com/photo/3184292/"
+  },
+  {
+    "collection": "articles",
+    "key": "inventory-visibility-manufacturing",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/8940223/pexels-photo-8940223.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "Coiled industrial metal stored for manufacturing; illustrative photography",
+    "source": "https://www.pexels.com/photo/8940223/"
+  },
+  {
+    "collection": "articles",
+    "key": "data-foundations-reporting-tools",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/1181244/pexels-photo-1181244.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "A developer checking connected digital tools; illustrative photography",
+    "source": "https://www.pexels.com/photo/1181244/"
+  },
+  {
+    "collection": "articles",
+    "key": "financial-clarity-healthcare-pharma",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/3825586/pexels-photo-3825586.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "A healthcare professional discussing patient care; illustrative photography",
+    "source": "https://www.pexels.com/photo/3825586/"
+  },
+  {
+    "collection": "articles",
+    "key": "strategic-priorities-workable-plan",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/3184666/pexels-photo-3184666.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "A written work plan beside a laptop; illustrative photography",
+    "source": "https://www.pexels.com/photo/3184666/"
+  },
+  {
+    "collection": "offices",
+    "key": "mumbai",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/5414582/pexels-photo-5414582.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "Mumbai skyline at night; city context, not a photograph of IGAS premises",
+    "source": "https://www.pexels.com/photo/5414582/"
+  },
+  {
+    "collection": "offices",
+    "key": "bengaluru",
+    "field": "imageUrl",
+    "url": "https://images.unsplash.com/photo-1687158266872-fd2773fa76c6?auto=format&fit=crop&w=1600&q=80",
+    "alt": "Bengaluru city skyline; city context, not a photograph of IGAS premises",
+    "source": "https://unsplash.com/photos/sEDewKyq6YM"
+  },
+  {
+    "collection": "focus-areas",
+    "key": "finance-enterprise",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/6802049/pexels-photo-6802049.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "Financial information reviewed on a tablet; illustrative photography",
+    "source": "https://www.pexels.com/photo/6802049/"
+  },
+  {
+    "collection": "focus-areas",
+    "key": "innovation-creative-business",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/1181533/pexels-photo-1181533.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "A collaborative team developing ideas on a whiteboard; illustrative photography",
+    "source": "https://www.pexels.com/photo/1181533/"
+  },
+  {
+    "collection": "focus-areas",
+    "key": "essential-industries",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/2280549/pexels-photo-2280549.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "Laboratory test tubes used in scientific work; illustrative photography",
+    "source": "https://www.pexels.com/photo/2280549/"
+  },
+  {
+    "collection": "focus-areas",
+    "key": "consumer-retail",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "A shopping trolley illustrating consumer and retail activity; illustrative photography",
+    "source": "https://www.pexels.com/photo/5632402/"
+  },
+  {
+    "collection": "focus-areas",
+    "key": "built-environment",
+    "field": "imageUrl",
+    "url": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1600&q=80",
+    "alt": "Commercial buildings viewed from street level; illustrative photography",
+    "source": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab"
+  },
+  {
+    "collection": "focus-areas",
+    "key": "resources-materials",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/32845682/pexels-photo-32845682.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "Industrial workers inspecting steel coils in a factory; illustrative photography",
+    "source": "https://www.pexels.com/photo/32845682/"
+  },
+  {
+    "collection": "leadership-profiles",
+    "key": "demo-advisory-lead",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/3182742/pexels-photo-3182742.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "Illustrative advisory-team collaboration; not a portrait of an IGAS leader",
+    "source": "https://www.pexels.com/photo/3182742/"
+  },
+  {
+    "collection": "leadership-profiles",
+    "key": "demo-assurance-lead",
+    "field": "imageUrl",
+    "url": "https://images.pexels.com/photos/3184317/pexels-photo-3184317.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "Illustrative professional presentation; not a portrait of an IGAS leader",
+    "source": "https://www.pexels.com/photo/3184317/"
+  },
+  {
+    "collection": "pages",
+    "key": "/our-approach",
+    "field": "sections.0.imageUrl",
+    "url": "https://images.pexels.com/photos/3184293/pexels-photo-3184293.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "Colleagues working through a business challenge; illustrative photography",
+    "source": "https://www.pexels.com/photo/3184293/"
+  },
+  {
+    "collection": "pages",
+    "key": "/our-approach",
+    "field": "sections.2.imageUrl",
+    "url": "https://images.pexels.com/photos/1181396/pexels-photo-1181396.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "A team agreeing a scope in a meeting room; illustrative photography",
+    "source": "https://www.pexels.com/photo/1181396/"
+  },
+  {
+    "collection": "pages",
+    "key": "/working-with-igas",
+    "field": "sections.1.imageUrl",
+    "url": "https://images.pexels.com/photos/3184460/pexels-photo-3184460.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "A prepared workspace for the first conversation; illustrative photography",
+    "source": "https://www.pexels.com/photo/3184460/"
+  },
+  {
+    "collection": "pages",
+    "key": "/our-approach",
+    "field": "sections.5.slides.0.imageUrl",
+    "url": "https://images.pexels.com/photos/5834234/pexels-photo-5834234.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "Financial chart analysis; illustrative photography",
+    "source": "https://www.pexels.com/photo/5834234/"
+  },
+  {
+    "collection": "pages",
+    "key": "/our-approach",
+    "field": "sections.5.slides.1.imageUrl",
+    "url": "https://images.pexels.com/photos/6285126/pexels-photo-6285126.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "A presentation of financial information; illustrative photography",
+    "source": "https://www.pexels.com/photo/6285126/"
+  },
+  {
+    "collection": "pages",
+    "key": "/our-approach",
+    "field": "sections.5.slides.2.imageUrl",
+    "url": "https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=1600&q=80",
+    "alt": "A collaborative business meeting; illustrative photography",
+    "source": "https://images.unsplash.com/photo-1553877522-43269d4ea984"
+  },
+  {
+    "collection": "pages",
+    "key": "/our-approach",
+    "field": "sections.5.slides.3.imageUrl",
+    "url": "https://images.pexels.com/photos/6120214/pexels-photo-6120214.jpeg?auto=compress&cs=tinysrgb&w=1600&q=80",
+    "alt": "Financial planning and calculation; illustrative photography",
+    "source": "https://www.pexels.com/photo/6120214/"
+  },
+  {
+    "collection": "pages",
+    "key": "/our-approach",
+    "field": "sections.5.slides.4.imageUrl",
+    "url": "https://images.unsplash.com/photo-1591115765373-5207764f72e7?auto=format&fit=crop&w=1600&q=80",
+    "alt": "A professional audience at a presentation; illustrative photography",
+    "source": "https://images.unsplash.com/photo-1591115765373-5207764f72e7"
+  }
+]
