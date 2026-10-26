@@ -4,7 +4,7 @@ services:
     runtime: node
     plan: free
     region: ohio
-    repo: https://github.com/atulvjd/igas-web
+    repo: https://github.com/atulvjd/igas-production
     branch: main
     rootDir: cms
     buildCommand: npm ci --include=dev && npm run build
