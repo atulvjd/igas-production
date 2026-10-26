@@ -1,3 +1,17 @@
+## Phone statistics rail — 25 October 2026
+
+On screens up to 600 pixels, the homepage statistics use a compact horizontal swipe rail with dividers instead of the tall rounded card grid. All five CMS figures, labels and explanatory descriptions remain available. A swipe hint and focusable region make the remaining figures discoverable. Tablet/laptop layouts retain their existing grid rules.
+
+TypeScript and diff checks passed. Browser checks at 320, 390 and 600 pixels verified horizontal scrolling, access to the last metric, compact unboxed items and no page overflow; actual emulated touch swiping passed at 390 pixels. Checks at 768, 1024 and 1440 pixels confirmed the existing grid and absence of the mobile hint. The phone screenshot was inspected.
+
+## Mobile cookie consent dismissal — 25 October 2026
+
+Consent dismissal no longer depends on cookie access succeeding. The banner and analytics gate share `lib/cookie-consent.ts`, with a one-year cookie, expiring local-storage preference and a tab-memory fallback when browser storage is unavailable. Cookie parsing supports normal/legacy choices and restricted storage access is caught. The banner syncs preference-change events and storage changes; the first client read avoids flashing a banner for a saved choice.
+
+After accepting or rejecting, the banner is removed entirely. Preferences reopen through the footer’s Cookie preferences button instead of leaving a floating settings button. Existing analytics events still pass through the current-consent check, including after withdrawal. Cookie/Privacy policy records and their source templates now describe the additional preference storage and footer control; local snapshots are retained under `cms/.tmp/consent-disclosure-*/`.
+
+Validation: TypeScript, readiness checks and `scripts/test-cookie-consent.mjs` passed. Emulated phone touch checks verified accept/reject, reload persistence, footer reopening, opt-out, blocked cookie writes, blocked cookies plus local storage, and client navigation using tab memory. Narrow-phone and desktop controls passed. The isolated Brave test profile’s cookie-banner hiding filter was disabled for localhost to exercise the real controls; this did not modify the user’s browser profile or website privacy-filter behavior. Production analytics delivery and a physical phone were not tested.
+
 ## Public email placeholder — 25 October 2026
 
 All public contact addresses in Site settings, Footer, Offices and custom/policy Page content now use `example@example.10.com`, including India and Global published/draft versions. The contact input placeholder and content-population templates use the same address. The original firm-profile address was replaced at the user’s request. CMS administrator identities and backend delivery configuration are outside this content change. Before snapshots are retained under `cms/.tmp/placeholder-email-*/`.
