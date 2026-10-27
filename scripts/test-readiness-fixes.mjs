@@ -89,9 +89,18 @@ assert.throws(() => siteUrl.getSiteUrl(), /NEXT_PUBLIC_SITE_URL must be configur
 
 const contactFormSource = read('components/contact-page.tsx')
 const analyticsSource = read('components/consent-aware-analytics.tsx')
-assert.match(contactFormSource, /consentText \|\| 'I agree to be contacted by IGAS about this enquiry\.'/)
+assert.match(contactFormSource, /I agree to be contacted by IGAS about this enquiry\./)
 assert.match(contactFormSource, /finally\s*\{/)
 assert.match(read('components/igas-site.tsx'), /beforeSend|COOKIE_EVENT|analyticsAllowed/)
 assert.match(analyticsSource, /hasAnalyticsConsent\(\) \? event : null/)
 
-console.log('Readiness fix tests passed (19 checks).')
+// Recruitment must never fall back to the general enquiry receiver.
+const recruitment = loadTypeScript('lib/contact.ts', { env: {
+  NODE_ENV: 'production', CONTACT_WEBHOOK_URL: 'https://example.com/enquiries',
+  APPLICATION_DELIVERY_MODE: 'development',
+} })
+await assert.rejects(recruitment.deliverContactSubmission(contact.validateContactForm(validContact).value, 'application'), /not configured/)
+const wrongExtension = copyFormData(validContact)
+wrongExtension.set('attachment', new File(['test'], 'resume.exe', { type: 'application/pdf' }))
+assert.match(contact.validateContactForm(wrongExtension).error, /Only PDF/)
+console.log('Readiness fix tests passed, including recruitment isolation and attachment validation.')

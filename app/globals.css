@@ -1339,3 +1339,24 @@ button:disabled { transform: none; }
   .stats-section .stat > span:not(.stat-icon):not(.stat-index) { display: block; font-size: 10px; line-height: 1.6; letter-spacing: .06em; }
   .stats-section .stat p { max-width: none; margin-top: 9px; font-size: 11px; line-height: 1.6; }
 }
+
+/* Keep the role and application together, with an early application form on mobile. */
+.job-detail-layout { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); grid-template-areas: "intro application" "description application"; grid-template-rows: auto 1fr; align-items: start; column-gap: clamp(28px, 4vw, 64px); row-gap: 36px; padding-top: 48px; padding-bottom: 72px; }
+.job-introduction { grid-area: intro; min-width: 0; }
+.job-introduction h1 { margin: 20px 0; font: 400 clamp(2.5rem, 4.5vw, 4.5rem)/1.07 Georgia, serif; letter-spacing: -.05em; overflow-wrap: anywhere; }
+.job-introduction .lead { max-width: 100%; }
+.job-introduction .breadcrumbs { flex-wrap: wrap; }
+.job-introduction .button { margin-top: 20px; }
+.job-application-panel { grid-area: application; min-width: 0; scroll-margin-top: 120px; }
+.job-application-panel .contact-form-fields { grid-template-columns: minmax(0, 1fr); }
+.job-application-panel .contact-form-heading h2 { overflow-wrap: anywhere; }
+.job-description { grid-area: description; min-width: 0; font-size: 17px; line-height: 1.8; color: var(--muted); }
+.job-description section + section { margin-top: 32px; }
+.job-description h2 { margin: 0 0 16px; color: var(--ink); font: 400 30px/1.2 Georgia, serif; letter-spacing: -.03em; }
+@media (max-width: 900px) {
+  .job-detail-layout { grid-template-columns: minmax(0, 1fr); grid-template-areas: "intro" "application" "description"; grid-template-rows: auto; gap: 32px; padding-top: 32px; padding-bottom: 48px; }
+  .job-application-panel .contact-form-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .job-application-panel .contact-form-fields { grid-template-columns: minmax(0, 1fr); }
+}

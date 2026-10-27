@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { ContactForm } from '@/components/contact-page'
 import { ArrowUpRight } from 'lucide-react'
 import { Footer, Header } from '@/components/igas-site'
 import { OfficeActions } from '@/components/office-directory'
@@ -28,7 +29,24 @@ export function JobDetailPage({ job, mode }: { job: CmsJob; mode: SiteMode }) {
     ['Requirements', job.requirements || job.qualifications],
     ['Benefits', job.benefits],
   ] as const
-  const applicationHref = job.applicationUrl || (job.applicationCTA?.startsWith('/') || job.applicationCTA?.startsWith('https://') ? job.applicationCTA : '/contact')
-  const applicationLabel = job.applicationCTA && !job.applicationCTA.startsWith('/') && !job.applicationCTA.startsWith('https://') ? job.applicationCTA : 'Apply for this role'
-  return <div className="igas-site"><Header mode={mode} /><main id="main-content" tabIndex={-1} className="detail-page"><div className="container detail-hero"><nav className="breadcrumbs" aria-label="Breadcrumb"><Link href="/">Home</Link><span aria-hidden="true">/</span><Link href="/careers">Careers</Link><span aria-hidden="true">/</span><span>{job.title}</span></nav><p className="eyebrow">{[job.department, job.employmentType, job.location].filter(Boolean).join(' · ')}</p><h1>{job.title}</h1>{job.shortDescription && <p className="lead">{job.shortDescription}</p>}{job.officeSlug && <Link className="arrow-link" href={`/offices/${job.officeSlug}`}>View office details <ArrowUpRight size={17} /></Link>}{job.deadline && <p className="job-deadline">Applications close: {job.deadline}</p>}<a className="button button-dark" href={applicationHref}>{applicationLabel}<ArrowUpRight size={16} /></a></div>{sections.some(([, content]) => content?.length) && <div className="container detail-body"><div>{sections.map(([title, content]) => content?.length ? <section key={title}><h2>{title}</h2><RichText content={content} /></section> : null)}</div></div>}</main><Footer mode={mode} /></div>
+  const applicationHref = '#job-application'
+  const applicationLabel = 'Apply for this role'
+  return <div className="igas-site"><Header mode={mode} />
+    <main id="main-content" tabIndex={-1} className="detail-page job-detail-page">
+      <div className="container job-detail-layout">
+        <div className="job-introduction">
+          <nav className="breadcrumbs" aria-label="Breadcrumb"><Link href="/">Home</Link><span aria-hidden="true">/</span><Link href="/careers">Careers</Link><span aria-hidden="true">/</span><span aria-current="page">{job.title}</span></nav>
+          <p className="eyebrow">{[job.department, job.employmentType, job.location].filter(Boolean).join(' · ')}</p>
+          <h1>{job.title}</h1>
+          {job.shortDescription && <p className="lead">{job.shortDescription}</p>}
+          {job.officeSlug && <Link className="arrow-link" href={`/offices/${job.officeSlug}`}>View office details <ArrowUpRight size={17} /></Link>}
+          {job.deadline && <p className="job-deadline">Applications close: {job.deadline}</p>}
+          <a className="button button-dark" href={applicationHref}>{applicationLabel}<ArrowUpRight size={16} /></a>
+        </div>
+        <aside id="job-application" className="job-application-panel contact-page" aria-label="Apply for this role">
+          <ContactForm job={{ slug: job.slug, title: job.title, mode }} />
+        </aside>
+        {sections.some(([, content]) => content?.length) && <div className="job-description">{sections.map(([title, content]) => content?.length ? <section key={title}><h2>{title}</h2><RichText content={content} /></section> : null)}</div>}
+      </div>
+    </main><Footer mode={mode} /></div>
 }

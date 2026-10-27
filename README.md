@@ -70,7 +70,7 @@ The readiness regression checks for request limits, consent validation, route pa
 npm run test:readiness
 ```
 
-Contact and newsletter delivery are server-only adapters. Local development can use `CONTACT_DELIVERY_MODE=development` and `NEWSLETTER_DELIVERY_MODE=development`; production requires `CONTACT_WEBHOOK_URL` and/or `NEWSLETTER_WEBHOOK_URL` to be configured. Contact attachments are limited to PDF, DOC, and DOCX files up to 5 MB, and only sanitized attachment metadata is sent through the generic webhook adapter until a file-storage/email provider is selected.
+Enquiries and job applications can be reviewed in separate Enquiries and Job Applications inboxes in Strapi’s far-left navigation. Configure the same server-only `STRAPI_SUBMISSIONS_SECRET` (32+ random characters) in `.env.local` and `cms/.env`. Submissions and private attachments are saved in the database; the admin panel has a download control. Enquiries accept an optional brief; job applications require a CV and an open, published role. PDF, DOC and DOCX files are limited to 3 MB. See [production environment](docs/PRODUCTION-ENVIRONMENT.md#private-strapi-submission-inboxes) for hosted setup, backups, access and retention. Legacy contact/application webhook adapters remain available when inbox storage is unconfigured. Newsletter delivery uses its separate provider adapter.
 
 Production builds require `NEXT_PUBLIC_SITE_URL` to be set to the approved HTTPS origin. The analytics preference is opt-in and stored in a first-party cookie; marketing analytics is not connected. See [production environment](docs/PRODUCTION-ENVIRONMENT.md) for the analytics, request-size, attachment, and launch configuration boundaries.
 

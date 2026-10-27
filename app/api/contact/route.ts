@@ -20,7 +20,7 @@ export async function POST(request: Request) {
     const tooLarge = error instanceof RequestBodyTooLargeError
     logOperationalEvent('contact.rejected', { correlationId, category: tooLarge ? 'request_size' : 'malformed_request' })
     return Response.json(
-      { error: tooLarge ? 'The request is too large. Attachments must be 5 MB or smaller.' : 'The enquiry form could not be read. Please check the submitted fields.' },
+      { error: tooLarge ? 'The request is too large. Attachments must be 3 MB or smaller.' : 'The enquiry form could not be read. Please check the submitted fields.' },
       { status: tooLarge ? 413 : 400 },
     )
   }
@@ -30,6 +30,8 @@ export async function POST(request: Request) {
     logOperationalEvent('contact.rejected', { correlationId, category: 'validation' })
     return Response.json({ error: result.error }, { status: 400 })
   }
+
+  if (result.value) result.value.value.mode = formData.get('mode') === 'global' ? 'global' : 'india'
 
   try {
     await deliverContactSubmission(result.value!)

@@ -28,7 +28,7 @@ Public values: `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_INDIA_SITE_URL`, and `NEXT_P
 
 Server-only values: `STRAPI_URL`, `STRAPI_API_TOKEN`, `CONTACT_DELIVERY_MODE`, `CONTACT_WEBHOOK_URL`, `CONTACT_ATTACHMENT_DELIVERY_MODE`, `NEWSLETTER_DELIVERY_MODE`, `NEWSLETTER_WEBHOOK_URL`, and `REVALIDATION_SECRET`.
 
-Use a scoped, read-only Strapi API token only in Next.js server runtime. Contact/newsletter delivery modes are `development` locally; production must set an approved webhook/provider endpoint. Without one, the APIs return 503. Contact requests are limited to 5 MiB plus multipart overhead; newsletter JSON requests are limited to 16 KiB. Configure matching edge/WAF limits because platform and proxy limits may run before the application.
+Use a scoped, read-only Strapi API token only in Next.js server runtime. Enquiries and applications use the private Strapi inboxes when the shared submission secret is set; legacy webhook delivery is an optional alternative. Newsletter production delivery needs its own provider endpoint. Unconfigured production delivery returns 503. Form requests are limited to 3 MiB plus multipart overhead; newsletter JSON requests are limited to 16 KiB. Configure matching edge/WAF limits because platform and proxy limits may run before the application.
 
 The cookie preference is persisted in `igas-consent` for one year. Vercel Analytics is loaded only after opt-in and outgoing events are rejected after the choice is withdrawn. This technical default does not establish whether analytics consent is legally required; have legal/product owners approve the copy, retention, and market-specific behavior. No marketing tracking is connected.
 
@@ -55,3 +55,22 @@ The built-in form limiter is application-level, per process, and intentionally r
 ## Final acceptance gate
 
 Do not set production values, enable `ALLOW_INDEXING`, or publish a launch until operations has verified this checklist in the target environment: secrets exist only in the approved secret manager; exact CORS origins and scoped Strapi token are active; provider/storage acceptance tests pass; WAF and request-size rules are active; PostgreSQL/media backups are verified; and domain canonical/webhook checks pass. The current workspace has none of those external configurations.
+
+## Private Strapi submission inboxes
+
+Both website forms save to Strapi when `STRAPI_SUBMISSIONS_SECRET` is configured. Set the same strong random value (at least 32 characters) in the Next.js server environment and the CMS environment. Never use a `NEXT_PUBLIC_` variable. Keep `STRAPI_API_TOKEN` read-only; the dedicated submission secret only permits creation and does not expose inbox reads.
+
+- Far-left navigation → Enquiries: sender details, message, optional brief, consent, received date, status, and internal notes.
+- Far-left navigation → Job Applications: sender details, role slug/title, message, required CV, consent, received date, status, and internal notes.
+- The Submitted file control downloads the original attachment from the authenticated admin view. Files are stored as base64 JSON in the database, not the public Media Library or ephemeral Render filesystem. Include these tables in database backups, restrict admin roles, and delete attachments with the record when its retention period expires. Base64 increases storage by roughly one third; this approach suits a modest-volume inbox.
+- New entries start with status `new`; editors can set `reviewing`, `contacted`, or `closed`. These collections have no draft/publish workflow and no public REST read/update/delete routes. Their POST routes require the server-only shared secret. Do not grant public role permissions for submissions.
+- Files are PDF, DOC, or DOCX, up to 3 MB, checked for extension, declared type, decoded size, and document signature. Signature checking is not malware scanning: only download expected documents with normal endpoint protections. The 3 MB limit keeps incoming multipart requests below Vercel's function body limit. Strapi's JSON limit is 5 MB for the base64 payload.
+- The backend independently validates the currently published, open job and deadline. A failed database save returns an error; it never confirms successful delivery.
+
+With the submission secret configured, these inboxes take precedence over legacy webhook delivery. Email/webhook settings are optional and not needed to review submissions in Strapi. Without the secret, the existing webhook/development adapters remain available; production rejects unconfigured delivery.
+
+Local setup: `.env.local` and `cms/.env` contain matching ignored credentials. Restart Strapi after changing the secret. Check `node --env-file=.env.local scripts/test-strapi-submissions.mjs` against local servers; it creates and removes synthetic records, verifies stored file bytes and validates access controls.
+
+Hosted rollout: deploy the CMS code and rebuilt admin panel on Render, set the shared secret in Render and Vercel, then deploy the website. Use the existing persistent production database with backups. Verify both inboxes through a synthetic website submission before collecting real submissions. Local changes do not configure or deploy either hosted service.
+
+The dedicated inbox screens are separate from the Content Manager website collections. They reuse authenticated Content Manager endpoints and existing per-collection read/update permissions; hiding their content navigation links does not change their schemas, records, or permissions. Menu access requires the corresponding collection read permission.

@@ -1,0 +1,67 @@
+{
+  "kind": "collectionType",
+  "collectionName": "job_applications",
+  "info": {
+    "singularName": "job-application",
+    "pluralName": "job-applications",
+    "displayName": "Job Application"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "maxLength": 120
+    },
+    "email": {
+      "type": "email",
+      "required": true
+    },
+    "message": {
+      "type": "text",
+      "required": true
+    },
+    "consent": {
+      "type": "boolean",
+      "required": true
+    },
+    "receivedAt": {
+      "type": "datetime"
+    },
+    "submissionStatus": {
+      "type": "enumeration",
+      "enum": [
+        "new",
+        "reviewing",
+        "contacted",
+        "closed"
+      ],
+      "default": "new"
+    },
+    "notes": {
+      "type": "text"
+    },
+    "attachment": {
+      "type": "customField",
+      "customField": "global::submission-file"
+    },
+    "mode": {
+      "type": "enumeration",
+      "enum": [
+        "india",
+        "global"
+      ],
+      "default": "india"
+    },
+    "jobSlug": {
+      "type": "string",
+      "required": true
+    },
+    "jobTitle": {
+      "type": "string",
+      "required": true
+    }
+  }
+}
