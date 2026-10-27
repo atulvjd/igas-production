@@ -1360,3 +1360,7 @@ button:disabled { transform: none; }
 @media (max-width: 560px) {
   .job-application-panel .contact-form-fields { grid-template-columns: minmax(0, 1fr); }
 }
+
+.newsletter .newsletter-consent { display: flex; align-items: flex-start; gap: 10px; margin-top: 14px; font-size: 12px; line-height: 1.6; }
+.newsletter .newsletter-consent input[type=checkbox] { flex: 0 0 16px; width: 16px; height: 16px; min-width: 16px; margin-top: 3px; padding: 0; accent-color: var(--yellow, #ffdd00); }
+.newsletter .newsletter-consent a { text-decoration: underline; text-underline-offset: 3px; }

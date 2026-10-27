@@ -1,0 +1,49 @@
+{
+  "kind": "collectionType",
+  "collectionName": "newsletters",
+  "info": {
+    "singularName": "newsletter",
+    "pluralName": "newsletters",
+    "displayName": "Newsletter Draft"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "subject": {
+      "type": "string",
+      "required": true,
+      "maxLength": 160
+    },
+    "previewText": {
+      "type": "string",
+      "maxLength": 250
+    },
+    "body": {
+      "type": "richtext",
+      "required": true
+    },
+    "heroImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "mode": {
+      "type": "enumeration",
+      "enum": [
+        "india",
+        "global"
+      ],
+      "default": "india"
+    },
+    "internalNotes": {
+      "type": "text"
+    }
+  }
+}

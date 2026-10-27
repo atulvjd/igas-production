@@ -74,3 +74,17 @@ Local setup: `.env.local` and `cms/.env` contain matching ignored credentials. R
 Hosted rollout: deploy the CMS code and rebuilt admin panel on Render, set the shared secret in Render and Vercel, then deploy the website. Use the existing persistent production database with backups. Verify both inboxes through a synthetic website submission before collecting real submissions. Local changes do not configure or deploy either hosted service.
 
 The dedicated inbox screens are separate from the Content Manager website collections. They reuse authenticated Content Manager endpoints and existing per-collection read/update permissions; hiding their content navigation links does not change their schemas, records, or permissions. Menu access requires the corresponding collection read permission.
+
+## Newsletter CMS
+
+The footer signup now requires explicit newsletter consent. The website's `/api/newsletter` endpoint validates and rate-limits requests, then uses the existing server-only `STRAPI_SUBMISSIONS_SECRET` to call the CMS `/api/newsletter-subscriptions` endpoint. No additional credentials are required when the private submission inboxes are already configured. There are no public subscriber or newsletter draft read endpoints.
+
+Use **Newsletter** in Strapi's far-left navigation:
+
+- **Subscribers:** review addresses, recorded consent date/version, India/Global source, and status. New signups are `pending`, not verified subscribers. Review/verify the address before changing the status to `subscribed`; `unsubscribed` records remain excluded. Duplicate signups return the same public acknowledgment and never reactivate opted-out records. The stored email is lowercase and unique.
+- **Newsletter drafts:** create a title, email subject, preview text, Markdown body, optional image and site mode. The native Strapi editor provides a Markdown preview and draft/publish workflow. These records are not public website pages.
+- **Sending is deliberately disconnected:** saving or publishing does not send or schedule emails. No bulk-send button or public mailing-list export is exposed. To activate sending, integrate a transactional/marketing email provider with verified sender/domain, address confirmation (double opt-in), token-based unsubscribe links, suppression/bounce handling, and an explicit campaign send action. These delivery features are not implemented by the CMS collection alone. Do not use a draft's publish event as an email-sending trigger.
+
+When the Strapi submission secret is present, subscriber storage takes precedence over the legacy newsletter webhook adapter. Production no longer acknowledges a fake subscription via `NEWSLETTER_DELIVERY_MODE=development`.
+
+Validation: `node scripts/test-newsletter-cms.mjs` runs the isolated subscription rules. With both local servers running, `node --env-file=.env.local scripts/test-newsletter-cms.mjs --integration` verifies the website-to-CMS flow and removes its synthetic subscriber afterward. Deploy the updated CMS before the website; existing matched submission credentials are reused. Include the new subscriber and draft tables in backups.

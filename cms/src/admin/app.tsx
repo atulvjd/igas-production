@@ -17,6 +17,12 @@ export default {
       Component: async () => import('./pages/JobApplications'),
       position: 4,
     });
+    app.addMenuLink({
+      to: '/responses/newsletter', icon: Mail,
+      intlLabel: { id: 'igas.newsletter', defaultMessage: 'Newsletter' },
+      permissions: [{ action: 'plugin::content-manager.explorer.read', subject: 'api::newsletter-subscriber.newsletter-subscriber' }],
+      Component: async () => import('./pages/Newsletters'), position: 5,
+    });
     app.customFields.register({
       name: 'submission-file', type: 'json',
       intlLabel: { id: 'igas.submission-file', defaultMessage: 'Submitted file' },
@@ -28,7 +34,7 @@ export default {
     // Hide only the content navigation links; retain the schemas and RBAC permissions.
     app.registerHook('Admin/CM/pages/App/mutate-collection-types-links', ({ ctLinks, ...rest }: { ctLinks: Array<{ uid: string }>; [key: string]: unknown }) => ({
       ...rest,
-      ctLinks: ctLinks.filter(link => !['api::enquiry.enquiry', 'api::job-application.job-application'].includes(link.uid)),
+      ctLinks: ctLinks.filter(link => !['api::enquiry.enquiry', 'api::job-application.job-application', 'api::newsletter-subscriber.newsletter-subscriber', 'api::newsletter.newsletter'].includes(link.uid)),
     }));
   },
 };

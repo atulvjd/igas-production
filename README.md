@@ -83,3 +83,7 @@ To learn more, take a look at the following resources:
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 - [v0 Documentation](https://v0.app/docs) - learn about v0 and how to use it.
 # igas-production
+
+## Newsletter administration
+
+The Strapi **Newsletter** menu separates subscribers and newsletter drafts from website content. Footer signups require consent and are stored privately as pending subscribers using the existing submission credential. Drafts support subject, preview text, Markdown content and an optional image. Saving or publishing a newsletter does not send emails; delivery and automated confirmation/unsubscribe flows require an email provider integration. See [newsletter setup](docs/PRODUCTION-ENVIRONMENT.md#newsletter-cms).

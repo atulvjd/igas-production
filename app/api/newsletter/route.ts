@@ -23,6 +23,9 @@ export async function POST(request: Request) {
     )
   }
 
+  const input = body && typeof body === 'object' ? body as { consent?: unknown; mode?: unknown } : undefined
+  if (input?.consent !== true) return Response.json({ error: 'Please agree to receive the newsletter.' }, { status: 400 })
+
   const email = body && typeof body === 'object' ? (body as { email?: unknown }).email : undefined
   const result = validateNewsletterEmail(email)
   if (result.error) {
@@ -31,8 +34,8 @@ export async function POST(request: Request) {
   }
 
   try {
-    await subscribeToNewsletter(result.email!)
-    logOperationalEvent('newsletter.subscribed', { correlationId, development: process.env.NEWSLETTER_DELIVERY_MODE === 'development' })
+    const delivery = await subscribeToNewsletter(result.email!, input.mode === 'global' ? 'global' : 'india')
+    logOperationalEvent('newsletter.subscribed', { correlationId, development: 'development' in delivery && delivery.development === true })
     return Response.json({ ok: true })
   } catch {
     logOperationalEvent('newsletter.failed', { correlationId, category: 'delivery' })

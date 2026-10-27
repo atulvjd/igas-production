@@ -334,7 +334,7 @@ function LeadershipPresenceSection({ content }: { content: CmsContent }) { const
 
 
 
-function Newsletter({ footer, title }: { footer?: CmsFooter; title?: string }) {
+function Newsletter({ footer, title, mode }: { footer?: CmsFooter; title?: string; mode: SiteMode }) {
   const emailId = useId()
   const [email, setEmail] = useState('')
   const [sent, setSent] = useState(false)
@@ -348,7 +348,7 @@ function Newsletter({ footer, title }: { footer?: CmsFooter; title?: string }) {
     setBusy(true)
     setError('')
     try {
-      const response = await fetch('/api/newsletter', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ email }) })
+      const response = await fetch('/api/newsletter', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ email, consent: new FormData(event.currentTarget).get('newsletterConsent') === 'on', mode }) })
       const body = await response.json() as { error?: string }
       if (response.ok) setSent(true)
       else setError(body.error || 'Unable to subscribe right now.')
@@ -360,7 +360,7 @@ function Newsletter({ footer, title }: { footer?: CmsFooter; title?: string }) {
     }
   }
   if (!title && !footer?.newsletterTitle && !footer?.newsletterDescription) return null
-  return <div className="newsletter"><div><h3>{title || footer?.newsletterTitle}</h3>{footer?.newsletterDescription && <p>{footer.newsletterDescription}</p>}</div>{sent ? <p className="success-message"><Check size={17} /> {footer?.newsletterSuccess || 'You’re on the list.'}</p> : <form onSubmit={submit} className="newsletter-form" aria-busy={busy}><div className="newsletter-input-row"><label className="sr-only" htmlFor={emailId}>{footer?.emailLabel || 'Email address'}</label><input id={emailId} type="email" autoComplete="email" maxLength={254} required aria-invalid={Boolean(error)} aria-describedby={error ? `${emailId}-error` : undefined} value={email} onChange={(event) => setEmail(event.target.value)} placeholder={footer?.emailPlaceholder || "Your email address"} /><button type="submit" aria-label={busy ? 'Subscribing' : footer?.subscribeLabel || 'Subscribe'} disabled={busy}>{busy ? <LoaderCircle className="interaction-spinner" size={18} aria-hidden="true" /> : <ArrowUpRight size={18} />}</button></div>{error && <p id={`${emailId}-error`} className="form-error newsletter-error" role="alert">{error}</p>}</form>}</div>
+  return <div className="newsletter"><div><h3>{title || footer?.newsletterTitle}</h3>{footer?.newsletterDescription && <p>{footer.newsletterDescription}</p>}</div>{sent ? <p className="success-message"><Check size={17} /> {'Thank you. Your newsletter signup has been recorded.'}</p> : <form onSubmit={submit} className="newsletter-form" aria-busy={busy}><div className="newsletter-input-row"><label className="sr-only" htmlFor={emailId}>{footer?.emailLabel || 'Email address'}</label><input id={emailId} type="email" autoComplete="email" maxLength={254} required aria-invalid={Boolean(error)} aria-describedby={error ? `${emailId}-error` : undefined} value={email} onChange={(event) => setEmail(event.target.value)} placeholder={footer?.emailPlaceholder || "Your email address"} /><button type="submit" aria-label={busy ? 'Subscribing' : footer?.subscribeLabel || 'Subscribe'} disabled={busy}>{busy ? <LoaderCircle className="interaction-spinner" size={18} aria-hidden="true" /> : <ArrowUpRight size={18} />}</button></div><label className="newsletter-consent"><input type="checkbox" required name="newsletterConsent" /><span>I agree to receive IGAS newsletters. <Link href="/privacy-policy">Privacy policy</Link>. You can unsubscribe from future emails.</span></label>{error && <p id={`${emailId}-error`} className="form-error newsletter-error" role="alert">{error}</p>}</form>}</div>
 }
 
 export function Footer({ mode, footer }: { mode: SiteMode; footer?: CmsFooter }) {
@@ -409,7 +409,7 @@ export function Footer({ mode, footer }: { mode: SiteMode; footer?: CmsFooter })
         <nav className="footer-links" aria-label="Footer navigation">{footerGroups.map((group) => <div key={group.label}><h2>{group.label}</h2>{(group.label === 'Legal' ? group.links : group.links.slice(0, 5)).map((link) => <Link href={link.href} key={`${group.label}-${link.href}`} target={link.external ? '_blank' : undefined} rel={link.external ? 'noreferrer' : undefined}>{link.title}</Link>)}</div>)}{socialLinks.length > 0 && <div className="footer-connect-column">{socialLinks.length > 0 && <div className="footer-social-links"><h2>Follow IGAS</h2><div className="footer-social-icons">{socialLinks.map(link => <a href={link.href} key={link.href} target="_blank" rel="noreferrer" aria-label={`${link.label} (opens in a new tab)`} title={link.label}><SocialIcon href={link.href} label={link.label} /></a>)}</div></div>}</div>}</nav>
       </div>
       {offices.length > 0 && <div className="footer-office-summary" aria-label="Our offices">{offices.map(office => <div className="footer-office-summary-item" key={office.slug}><MapPin size={18} aria-hidden="true" /><div><Link href={`/offices/${office.slug}`}>{office.name || office.city}<ArrowUpRight size={13} aria-hidden="true" /></Link>{office.address && <address>{office.address}</address>}</div></div>)}</div>}
-      <Newsletter footer={resolvedFooter} title={newsletterTitle} />
+      <Newsletter footer={resolvedFooter} title={newsletterTitle} mode={mode} />
       <div className="footer-bottom"><div className="footer-bottom-details"><span>{resolvedFooter?.copyright || `© ${new Date().getFullYear()} IGAS. All rights reserved.`}</span>{legalLinks.length > 0 && <nav className="footer-legal-links" aria-label="Policies and terms">{legalLinks.map(link => <Link href={link.href} key={link.href} target={link.external ? '_blank' : undefined} rel={link.external ? 'noreferrer' : undefined}>{link.label}</Link>)}</nav>}</div><div className="footer-cookie-controls"><button type="button" className="footer-cookie-preferences" onClick={() => window.dispatchEvent(new Event(CONSENT_OPEN_EVENT))}>Cookie preferences</button><a href="#main-content">Back to top ↑</a></div></div>
     </div>
   </footer>

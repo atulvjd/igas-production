@@ -1,0 +1,53 @@
+{
+  "kind": "collectionType",
+  "collectionName": "newsletter_subscribers",
+  "info": {
+    "singularName": "newsletter-subscriber",
+    "pluralName": "newsletter-subscribers",
+    "displayName": "Newsletter Subscriber"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "email": {
+      "type": "email",
+      "required": true,
+      "unique": true
+    },
+    "subscriptionStatus": {
+      "type": "enumeration",
+      "enum": [
+        "pending",
+        "subscribed",
+        "unsubscribed"
+      ],
+      "default": "pending",
+      "required": true
+    },
+    "consent": {
+      "type": "boolean",
+      "required": true
+    },
+    "consentAt": {
+      "type": "datetime"
+    },
+    "consentVersion": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string"
+    },
+    "mode": {
+      "type": "enumeration",
+      "enum": [
+        "india",
+        "global"
+      ],
+      "default": "india"
+    },
+    "notes": {
+      "type": "text"
+    }
+  }
+}
