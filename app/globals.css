@@ -1327,7 +1327,6 @@ button:disabled { transform: none; }
 }
 
 /* Phone statistics form a compact horizontal rail; larger layouts retain their grid. */
-.stats-mobile-hint { display: none; }
 @media (max-width: 600px) {
   .stats-section .stats-grid { display: flex; align-items: stretch; gap: 0; max-width: 100%; padding: 8px 0 12px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scrollbar-width: thin; scrollbar-color: var(--green) var(--line); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); border-radius: 0; }
   .stats-section .stats-grid .stat { flex: 0 0 160px; min-width: 0; min-height: 0; padding: 12px 18px; border: 0; border-right: 1px solid var(--line); border-radius: 0; background: transparent; box-shadow: none; scroll-snap-align: start; }
@@ -1339,6 +1338,4 @@ button:disabled { transform: none; }
   .stats-section .stat strong { margin-bottom: 8px; font-size: 2.1rem; line-height: 1.1; }
   .stats-section .stat > span:not(.stat-icon):not(.stat-index) { display: block; font-size: 10px; line-height: 1.6; letter-spacing: .06em; }
   .stats-section .stat p { max-width: none; margin-top: 9px; font-size: 11px; line-height: 1.6; }
-  .stats-section .stats-mobile-hint { display: flex; align-items: center; gap: 7px; margin: 12px 0 0; color: var(--green); font-size: 11px; }
-  .stats-mobile-hint span { font-size: 18px; line-height: 1; }
 }
